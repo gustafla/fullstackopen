@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg baseProfile="tiny" height="565" version="1.2" viewBox="0 0 568 565" width="568" xmlns="http://www.w3.org/2000/svg">
+  <path d="M-356,-442.5000000000001 L-356,0" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <rect fill="white" height="37" stroke="black" stroke-width="1" width="57" x="100.5" y="15.5"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="112.04817708333326" y="37.536458333333165">
+    selain  </text>
+  <rect fill="white" height="37" stroke="black" stroke-width="1" width="57" x="100.5" y="494.5"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="112.04817708333326" y="516.765625">
+    selain  </text>
+  <path d="M34,-442.5000000000001 L34,0" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <rect fill="white" height="37" stroke="black" stroke-width="1" width="67" x="485.5" y="15.5"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="496.6067708333333" y="37.536458333333165">
+    palvelin  </text>
+  <rect fill="white" height="37" stroke="black" stroke-width="1" width="67" x="485.5" y="494.5"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="496.6067708333333" y="516.765625">
+    palvelin  </text>
+  <rect fill="white" height="15.333333333333314" width="329.0234375" x="159.82877604166663" y="65.3333333333332"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="159.82877604166663" y="78.66666666666653">
+    HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa  </text>
+  <path d="M-355.53320312500006,-410 L33.21419270833326,-410" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M33.00000000000006,-410 L33.00000000000006,-410 L25,-418 L25,-410 L25,-402 L33.00000000000006,-410" fill="black" stroke="black" stroke-width="1" transform="translate(485.49999999999994 494.5)"/>
+  <rect fill="white" height="15.333333333333314" width="72.61067708333337" x="288.0351562499999" y="97.53124999999989"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="288.0351562499999" y="110.86458333333321">
+    HTML-koodi  </text>
+  <path d="M-355.53320312500006,-378 L33.21419270833326,-378" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M-355,-378 L-355,-378 L-347,-386 L-347,-378 L-347,-370 L-355,-378" fill="black" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <rect fill="white" height="15.333333333333314" width="360.13020833333337" x="144.27539062499994" y="129.72916666666657"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="144.27539062499994" y="143.06249999999991">
+    HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css  </text>
+  <path d="M-355.53320312500006,-346 L33.21419270833326,-346" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M33.00000000000006,-346 L33.00000000000006,-346 L25,-354 L25,-346 L25,-338 L33.00000000000006,-346" fill="black" stroke="black" stroke-width="1" transform="translate(485.49999999999994 494.5)"/>
+  <rect fill="white" height="15.333333333333314" width="52.604166666666686" x="298.03841145833326" y="161.92708333333326"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="298.03841145833326" y="175.2604166666666">
+    main.css  </text>
+  <path d="M-355.53320312500006,-314 L33.21419270833326,-314" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M-355,-314 L-355,-314 L-347,-322 L-347,-314 L-347,-306 L-355,-314" fill="black" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <rect fill="white" height="15.333333333333314" width="342.35677083333337" x="153.16210937499994" y="194.12499999999994"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="153.16210937499994" y="207.4583333333333">
+    HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js  </text>
+  <path d="M-355.53320312500006,-282 L33.21419270833326,-282" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M33.00000000000006,-282 L33.00000000000006,-282 L25,-290 L25,-282 L25,-274 L33.00000000000006,-282" fill="black" stroke="black" stroke-width="1" transform="translate(485.49999999999994 494.5)"/>
+  <rect fill="white" height="15.333333333333343" width="34.830729166666686" x="306.92513020833326" y="226.32291666666663"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="306.92513020833326" y="239.65624999999997">
+    spa.js  </text>
+  <path d="M-355.53320312500006,-249 L33.21419270833326,-249" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M-355,-249 L-355,-249 L-347,-257 L-347,-249 L-347,-241 L-355,-249" fill="black" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M-471,-236 L-471,-236 L-249,-236 L-241,-228 L-241,-146 L-471,-146 L-471,-236" fill="white" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M-249.16666666666674,-235.97916666666669 L-249.16666666666674,-227.97916666666669 L-241.16666666666674,-227.97916666666669" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="20.153645833333258" y="280.7864583333333">
+    selain alkaa suorittaa js-koodia  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="20.153645833333258" y="298.65104166666663">
+    joka pyytää JSON-datan palvelimelta  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="20.153645833333258" y="316.51562499999994">
+    ja joka lisää notes-lomakkeelle  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="20.153645833333258" y="334.3802083333333">
+    lähettämisen käsittelijän (onsubmit)  </text>
+  <rect fill="white" height="15.333333333333314" width="361.640625" x="143.52018229166663" y="362.1770833333333"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="143.52018229166663" y="375.51041666666663">
+    HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json  </text>
+  <path d="M-355.53320312500006,-113 L33.21419270833326,-113" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M33.00000000000006,-113 L33.00000000000006,-113 L25,-121 L25,-113 L25,-105 L33.00000000000006,-113" fill="black" stroke="black" stroke-width="1" transform="translate(485.49999999999994 494.5)"/>
+  <rect fill="white" height="15.333333333333314" width="327.28515625" x="160.69791666666657" y="394.375"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="160.69791666666657" y="407.7083333333333">
+    [{ content: &#34;HTML on helppoa&#34;, date: &#34;2019-01-01&#34; }, ...]  </text>
+  <path d="M-355.53320312500006,-81 L33.21419270833326,-81" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M-355,-81 L-355,-81 L-347,-89 L-347,-81 L-347,-73 L-355,-81" fill="black" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M-475,-68 L-475,-68 L-245,-68 L-237,-60 L-237,-13 L-475,-13 L-475,-68" fill="white" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <path d="M-245.44921875000003,-67.92708333333337 L-245.44921875000003,-59.92708333333337 L-237.44921875000003,-59.92708333333337" fill="none" stroke="black" stroke-width="1" transform="translate(485.5 494.5)"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="16.43619791666663" y="448.83854166666663">
+    selain suorittaa tapahtumankäsittelijän  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="16.43619791666663" y="466.703125">
+    joka renderöi muistiinpanot näytölle  </text>
+</svg>

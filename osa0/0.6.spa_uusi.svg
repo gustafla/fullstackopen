@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg baseProfile="tiny" height="744" version="1.2" viewBox="0 0 687 744" width="687" xmlns="http://www.w3.org/2000/svg">
+  <path d="M-396,-620.9375000000001 L-396,0" fill="none" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <rect fill="white" height="37" stroke="black" stroke-width="1" width="57" x="110.5" y="15.5"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="122.0286458333332" y="38.09895833333311">
+    selain  </text>
+  <rect fill="white" height="37" stroke="black" stroke-width="1" width="57" x="110.5" y="673.5"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="122.0286458333332" y="695.765625">
+    selain  </text>
+  <path d="M34,-620.9375000000001 L34,0" fill="none" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <rect fill="white" height="37" stroke="black" stroke-width="1" width="67" x="535.5" y="15.5"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="546.6067708333333" y="38.09895833333311">
+    palvelin  </text>
+  <rect fill="white" height="37" stroke="black" stroke-width="1" width="67" x="535.5" y="673.5"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="546.6067708333333" y="695.765625">
+    palvelin  </text>
+  <path d="M-517,-608 L-517,-608 L-283,-608 L-275,-600 L-275,-267 L-517,-267 L-517,-608" fill="white" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <path d="M-282.8873697916668,-607.6041666666667 L-282.8873697916668,-599.6041666666667 L-274.8873697916668,-599.6041666666667" fill="none" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="88.16145833333321">
+    selain suorittaa tapahtumankäsittelijän  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="106.02604166666659">
+    joka on edellisessä kaaviossa liitetty  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="123.89062499999984">
+    sivun lomakkeeseen  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="141.75520833333323"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="159.6197916666666">
+    tapahtumankäsittelijä estää lomakkeen  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="177.48437499999991">
+    oletusarvoiset toimenpiteet, eli mm.  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="195.34895833333323">
+    viestin lähetyksen ja sivun latauksen  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="213.2135416666666"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="231.07812499999997">
+    käsittelijä lisää lomakkeseen  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="248.9427083333333">
+    kirjoitetun viestin skriptin muuttujan  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="266.8072916666666">
+    listaan, sitten kutsuu funktiota joka  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="284.67187499999994">
+    päivittää selaimessa näkyvät  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="302.5364583333333">
+    listaelementit, niin että näkymä  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="320.40104166666663">
+    vastaa skriptin muuttujan listan sisältöä  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="338.26562499999994"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="356.1302083333333">
+    viimeiseksi käsittelijä lähettää viestin  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="373.99479166666663">
+    JSON-muodossa POST-pyynnöllä  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="23.835286458333144" y="391.85937499999994">
+    palvelimelle  </text>
+  <rect fill="white" height="15.333333333333314" width="401.66015624999994" x="153.50065104166657" y="419.65624999999994"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="153.50065104166657" y="432.98958333333326">
+    HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa  </text>
+  <path d="M-395.5527343750001,-235 L33.21419270833326,-235" fill="none" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <path d="M33,-235 L33,-235 L25,-243 L25,-235 L25,-227 L33,-235" fill="black" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <path d="M-74,-222 L-74,-222 L134,-222 L142,-214 L142,-167 L-74,-167 L-74,-222" fill="white" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <path d="M133.55924479166663,-221.64583333333337 L133.55924479166663,-213.64583333333337 L141.55924479166663,-213.64583333333337" fill="none" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="466.92252604166663" y="474.1197916666666">
+    palvelin tallentaa pyynnön mukana  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="466.92252604166663" y="491.98437499999994">
+    saapuneen viestin tietokantaan  </text>
+  <rect fill="white" height="15.333333333333258" width="242.77994791666669" x="232.94075520833326" y="519.78125"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="232.94075520833326" y="533.1145833333334">
+    201 created ({&#34;message&#34;:&#34;note created&#34;})  </text>
+  <path d="M-395.5527343750001,-135 L33.21419270833326,-135" fill="none" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <path d="M-395,-135 L-395,-135 L-387,-143 L-387,-135 L-387,-127 L-395,-135" fill="black" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <path d="M-525,-122 L-525,-122 L-275,-122 L-267,-114 L-267,-13 L-525,-13 L-525,-122" fill="white" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <path d="M-274.72981770833337,-121.52083333333337 L-274.72981770833337,-113.52083333333337 L-266.72981770833337,-113.52083333333337" fill="none" stroke="black" stroke-width="1" transform="translate(535.5 673.5)"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="15.677734374999886" y="574.2447916666666">
+    xhttp request tapahtumankäsittelijä kirjaa  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="15.677734374999886" y="592.109375">
+    palvelimen vastauksen selaimen konsoliin  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="15.677734374999886" y="609.9739583333334"/>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="15.677734374999886" y="627.8385416666667">
+    tämä vaihe ei näy käyttäjälle eikä ole  </text>
+  <text fill="black" font-family="Arial Unicode MS" font-size="13.333333333333334" x="15.677734374999886" y="645.703125">
+    keskeinen ominaisuus  </text>
+</svg>

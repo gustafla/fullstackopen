@@ -1,0 +1,37 @@
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka on edellisessä kaaviossa liitetty
+sivun lomakkeeseen
+
+tapahtumankäsittelijä estää lomakkeen
+oletusarvoiset toimenpiteet, eli mm.
+viestin lähetyksen ja sivun latauksen
+
+käsittelijä lisää lomakkeseen
+kirjoitetun viestin skriptin muuttujan
+listaan, sitten kutsuu funktiota joka
+päivittää selaimessa näkyvät
+listaelementit, niin että näkymä
+vastaa skriptin muuttujan listan sisältöä
+
+viimeiseksi käsittelijä lähettää viestin
+JSON-muodossa POST-pyynnöllä
+palvelimelle
+end note
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over palvelin:
+palvelin tallentaa pyynnön mukana
+saapuneen viestin tietokantaan
+end note
+
+palvelin-->selain: 201 created ({"message":"note created"})
+
+note over selain:
+xhttp request tapahtumankäsittelijä kirjaa
+palvelimen vastauksen selaimen konsoliin
+
+tämä vaihe ei näy käyttäjälle eikä ole
+keskeinen ominaisuus
+end note
