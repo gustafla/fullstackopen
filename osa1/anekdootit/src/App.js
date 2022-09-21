@@ -12,6 +12,7 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(Array(7).fill(0))
 
   const randomIndex = () => {
     let value
@@ -22,11 +23,19 @@ const App = () => {
     return value
   }
 
+  const voteUp = () => {
+    var newVotes = [...votes]
+    newVotes[selected] += 1
+    setVotes(newVotes)
+  }
+
   return (
     <div>
       <p>{anecdotes[selected]}</p>
+      <p>Has {votes[selected]} votes</p>
       <button onClick={() => setSelected(randomIndex())}>Next anecdote</button>
-    </div>
+      <button onClick={() => voteUp()}>Vote</button>
+    </div >
   )
 }
 
