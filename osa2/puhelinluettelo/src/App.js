@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
-const ContactList = ({ persons }) => {
+const ContactList = ({ persons, filter }) => {
+  const filterPersons = (person) => person.name.toLowerCase().includes(filter.toLowerCase())
+
   return (
     <table>
       <thead>
@@ -10,14 +12,12 @@ const ContactList = ({ persons }) => {
         </tr>
       </thead>
       <tbody>
-        {
-          persons.map(person =>
-            <tr key={person.name}>
-              <td>{person.name}</td>
-              <td>{person.number}</td>
-            </tr>
-          )
-        }
+        {persons.filter(filterPersons).map(person =>
+          <tr key={person.name}>
+            <td>{person.name}</td>
+            <td>{person.number}</td>
+          </tr>
+        )}
       </tbody>
     </table>
   )
@@ -29,6 +29,7 @@ const App = () => {
   ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -49,9 +50,16 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value)
+  }
+
+
   return (
     <div>
       <h2>Phonebook</h2>
+      filter shown with <input value={filter} onChange={handleFilterChange} />
+      <h2>Add a new</h2>
       <form>
         <div>
           name: <input value={newName} onChange={handleNameChange} />
@@ -60,12 +68,11 @@ const App = () => {
         <div>
           <button type="submit" onClick={addPerson}>add</button>
         </div>
-      </form >
+      </form>
       <h2>Numbers</h2>
-      <ContactList persons={persons} />
+      <ContactList persons={persons} filter={filter} />
     </div >
   )
-
 }
 
 export default App
