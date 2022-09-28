@@ -17,20 +17,28 @@ const Country = ({ country }) => {
   )
 }
 
-const CountryList = ({ countries }) => {
+const CountryList = ({ countries, showCountryOverride, handleShowCountry }) => {
+  if (countries.length === 1 || !!showCountryOverride) {
+    return (
+      <Country country={showCountryOverride ? showCountryOverride : countries[0]} />
+    )
+  }
+
   if (countries.length > 10) {
     return <p>Too many matches, specify another filter</p>
   }
 
-  if (countries.length === 1) {
-    return (
-      <Country country={countries[0]} />
-    )
+  if (countries.length === 0) {
+    return <p>Nothing to show, change your search</p>
   }
 
   return (
     <div>
-      {countries.map(cnt => <p key={cnt.cca3}>{cnt.name.common}</p>)}
+      {countries.map(cnt =>
+        <div key={cnt.cca3}>
+          {cnt.name.common} <button onClick={handleShowCountry} id={cnt.cca3}>show</button>
+        </div>
+      )}
     </div>
   )
 }
@@ -46,6 +54,7 @@ const Filter = ({ handleChange }) => {
 const App = () => {
   const [countries, setCountries] = useState([])
   const [filter, setFilter] = useState("")
+  const [showCountryOverride, setShowCountryOverride] = useState(null)
 
   useEffect(() => {
     console.log("Initial fetch effect")
@@ -62,10 +71,23 @@ const App = () => {
       .toLowerCase()
       .includes(filter.toLowerCase())
 
+  const handleFilterChange = event => {
+    console.log("Filter update")
+    setFilter(event.target.value)
+    setShowCountryOverride(null)
+  }
+
+  const handleShowCountry = event => {
+    console.log("Show country override")
+    const cca3 = event.target.id
+    const cnt = countries.find(cnt => cnt.cca3 === cca3)
+    setShowCountryOverride(cnt)
+  }
+
   return (
     <div>
-      <Filter handleChange={event => setFilter(event.target.value)} />
-      <CountryList countries={countries.filter(filterCountries)} />
+      <Filter handleChange={handleFilterChange} />
+      <CountryList countries={countries.filter(filterCountries)} handleShowCountry={handleShowCountry} showCountryOverride={showCountryOverride} />
     </div>
   );
 }
