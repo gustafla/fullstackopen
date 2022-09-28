@@ -65,7 +65,7 @@ const CountryList = ({ countries, showCountryOverride, handleShowCountry }) => {
     <div>
       {countries.map(cnt =>
         <div key={cnt.cca3}>
-          {cnt.name.common} <button onClick={handleShowCountry} id={cnt.cca3}>show</button>
+          {cnt.name.common} <button type="button" onClick={handleShowCountry} value={cnt.cca3}>show</button>
         </div>
       )}
     </div>
@@ -108,8 +108,7 @@ const App = () => {
 
   const handleShowCountry = event => {
     console.log("Show country override")
-    const cca3 = event.target.id
-    const cnt = countries.find(cnt => cnt.cca3 === cca3)
+    const cnt = countries.find(cnt => cnt.cca3 === event.target.value)
     setShowCountryOverride(cnt)
   }
 
