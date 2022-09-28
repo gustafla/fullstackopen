@@ -1,6 +1,34 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+const Weather = ({ country }) => {
+  const [weather, setWeather] = useState(null)
+
+  useEffect(() => {
+    setWeather(null)
+    console.log("Weather fetch effect")
+    const key = process.env.REACT_APP_API_KEY
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${country.capital[0]},${country.cca3}&units=metric&appid=${key}`)
+      .then(resp => {
+        console.log("Weather fetch fulfilled")
+        setWeather(resp.data)
+      })
+  }, [country])
+
+  if (!weather) {
+    return <p>No weather information available</p>
+  }
+
+  return (
+    <div>
+      <h2>Weather in {weather.name}</h2>
+      <p>Temperature: {weather.main.temp}°C (feels like {weather.main.feels_like}°C)</p>
+      <img src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`} alt={weather.weather[0].description} />
+      <p>Wind: {weather.wind.speed}m/s</p>
+    </div>
+  )
+}
+
 const Country = ({ country }) => {
   return (
     <div>
@@ -12,7 +40,8 @@ const Country = ({ country }) => {
       <ul>
         {Object.entries(country.languages).map(lang => <li key={lang[0]}>{lang[1]}</li>)}
       </ul>
-      <img src={country.flags.svg} style={{ width: '33%' }} />
+      <img src={country.flags.svg} style={{ width: '33%' }} alt={`Flag of ${country.name.common}`} />
+      <Weather country={country} />
     </div>
   )
 }
