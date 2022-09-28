@@ -1,15 +1,25 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import Filter from './components/Filter'
 import ContactForm from './components/ContactForm'
 import ContactList from './components/ContactList'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-1231244' }
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+
+  // Initially fetch phonebook from server
+  useEffect(() => {
+    console.log("Initial fetch effect")
+    axios
+      .get("http://localhost:3001/persons")
+      .then(resp => {
+        console.log("Initial fetch fulfilled")
+        setPersons(resp.data)
+      })
+  }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
