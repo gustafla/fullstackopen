@@ -8,7 +8,7 @@ const Weather = ({ country }) => {
     setWeather(null)
     console.log("Weather fetch effect")
     const key = process.env.REACT_APP_API_KEY
-    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${country.capital[0]},${country.cca3}&units=metric&appid=${key}`)
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${country.capital[0]},${country.cca2}&units=metric&appid=${key}`)
       .then(resp => {
         console.log("Weather fetch fulfilled")
         setWeather(resp.data)
