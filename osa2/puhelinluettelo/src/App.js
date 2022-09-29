@@ -21,14 +21,32 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    if (persons.some((person) => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-    } else {
-      const person = { name: newName, number: newNumber }
-      personService.create(person).then((person) => {
+    const existingPerson = persons.find((person) => person.name === newName)
+
+    if (!existingPerson) {
+      const newPerson = { name: newName, number: newNumber }
+      personService.create(newPerson).then((person) => {
         setPersons(persons.concat(person))
-        setNewName('')
-        setNewNumber('')
+      })
+    } else {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number?`)) {
+        const updated = { ...existingPerson, number: newNumber }
+        console.log(updated)
+        personService.update(updated).then(() => {
+          setPersons(persons.map(person => person.id === updated.id ? updated : person))
+        })
+      } else return
+    }
+
+    setNewName('')
+    setNewNumber('')
+  }
+
+  const removePerson = (person) => {
+    if (window.confirm(`Remove ${person.name}?`)) {
+      console.log("removing", person)
+      personService.remove(person).then(() => {
+        setPersons(persons.filter(p => p.id !== person.id))
       })
     }
   }
@@ -45,7 +63,6 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-
   return (
     <div>
       <h2>Phonebook</h2>
@@ -53,7 +70,7 @@ const App = () => {
       <h3>Add a new</h3>
       <ContactForm nameValue={newName} handleNameChange={handleNameChange} numberValue={newNumber} handleNumberChange={handleNumberChange} handleSubmitClick={addPerson} />
       <h3>Numbers</h3>
-      <ContactList persons={persons} filter={filter} />
+      <ContactList persons={persons} filter={filter} removePerson={removePerson} />
     </div >
   )
 }

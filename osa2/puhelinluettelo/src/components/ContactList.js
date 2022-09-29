@@ -1,4 +1,4 @@
-const ContactList = ({ persons, filter }) => {
+const ContactList = ({ persons, filter, removePerson }) => {
   const filterPersons = (person) => person.name.toLowerCase().includes(filter.toLowerCase())
 
   return (
@@ -14,6 +14,7 @@ const ContactList = ({ persons, filter }) => {
           <tr key={person.name}>
             <td>{person.name}</td>
             <td>{person.number}</td>
+            <td><button type="button" onClick={() => removePerson(person)}>remove</button></td>
           </tr>
         )}
       </tbody>
