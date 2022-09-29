@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Filter from './components/Filter'
 import ContactForm from './components/ContactForm'
 import ContactList from './components/ContactList'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -13,12 +13,10 @@ const App = () => {
   // Initially fetch phonebook from server
   useEffect(() => {
     console.log("Initial fetch effect")
-    axios
-      .get("http://localhost:3001/persons")
-      .then(resp => {
-        console.log("Initial fetch fulfilled")
-        setPersons(resp.data)
-      })
+    personService.getAll().then(persons => {
+      console.log("Initial fetch fulfilled")
+      setPersons(persons)
+    })
   }, [])
 
   const addPerson = (event) => {
@@ -27,8 +25,8 @@ const App = () => {
       alert(`${newName} is already added to phonebook`)
     } else {
       const person = { name: newName, number: newNumber }
-      axios.post("http://localhost:3001/persons", person).then((resp) => {
-        setPersons(persons.concat(resp.data))
+      personService.create(person).then((person) => {
+        setPersons(persons.concat(person))
         setNewName('')
         setNewNumber('')
       })
