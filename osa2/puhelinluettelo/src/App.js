@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { React, useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import ContactForm from './components/ContactForm'
 import ContactList from './components/ContactList'
@@ -15,9 +15,9 @@ const App = () => {
 
   // Initially fetch phonebook from server
   useEffect(() => {
-    console.log("Initial fetch effect")
+    console.log('Initial fetch effect')
     personService.getAll().then(persons => {
-      console.log("Initial fetch fulfilled")
+      console.log('Initial fetch fulfilled')
       setPersons(persons)
     })
   }, [])
@@ -57,7 +57,7 @@ const App = () => {
 
   const removePerson = (person) => {
     if (window.confirm(`Remove ${person.name}?`)) {
-      console.log("removing", person)
+      console.log('removing', person)
       personService.remove(person).then(() => {
         setSuccessMessage(`Removed ${person.name}`)
         setTimeout(() => setSuccessMessage(null), 5000)

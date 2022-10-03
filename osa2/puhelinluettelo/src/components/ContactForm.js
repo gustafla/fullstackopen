@@ -1,3 +1,5 @@
+import React from 'react'
+
 const ContactForm = ({ nameValue, handleNameChange, numberValue, handleNumberChange, handleSubmitClick }) => {
   return (
     <form>

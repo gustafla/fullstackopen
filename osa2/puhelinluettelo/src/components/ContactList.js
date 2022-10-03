@@ -1,3 +1,5 @@
+import React from 'react'
+
 const ContactList = ({ persons, filter, removePerson }) => {
   const filterPersons = (person) => person.name.toLowerCase().includes(filter.toLowerCase())
 
