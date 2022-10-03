@@ -32,8 +32,8 @@ const App = () => {
         setSuccessMessage(`Added ${newName}`)
         setTimeout(() => setSuccessMessage(null), 5000)
         setPersons(persons.concat(person))
-      }).catch(() => {
-        setErrorMessage(`Failed to add ${newName} to the server`)
+      }).catch(error => {
+        setErrorMessage(error.response.data.error)
         setTimeout(() => setErrorMessage(null), 5000)
       })
     } else {
@@ -44,8 +44,8 @@ const App = () => {
           setSuccessMessage(`Updated ${newName}`)
           setTimeout(() => setSuccessMessage(null), 5000)
           setPersons(persons.map(person => person.id === updated.id ? updated : person))
-        }).catch(() => {
-          setErrorMessage(`Failed to change ${newName} on the server`)
+        }).catch(error => {
+          setErrorMessage(`Failed to change ${newName} on the server: ${error.response.data.error}`)
           setTimeout(() => setErrorMessage(null), 5000)
         })
       } else return
@@ -62,8 +62,8 @@ const App = () => {
         setSuccessMessage(`Removed ${person.name}`)
         setTimeout(() => setSuccessMessage(null), 5000)
         setPersons(persons.filter(p => p.id !== person.id))
-      }).catch(() => {
-        setErrorMessage(`${person.name} was already removed from the server`)
+      }).catch(error => {
+        setErrorMessage(`Removing ${person.name} failed: ${error.response.data.error}`)
         setTimeout(() => setErrorMessage(null), 5000)
       })
     }
