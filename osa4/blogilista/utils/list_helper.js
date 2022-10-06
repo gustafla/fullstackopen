@@ -3,7 +3,7 @@ const dummy = (_blogs) => {
 }
 
 const totalLikes = (blogs) => {
-  return blogs.map(b => b.likes).reduce((a, b) => a + b)
+  return blogs.map(b => b.likes).reduce((a, b) => a + b, 0)
 }
 
 module.exports = {
