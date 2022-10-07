@@ -1,31 +1,13 @@
-const mongoose = require('mongoose')
 const supertest = require('supertest')
+const mongoose = require('mongoose')
+const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 
-const initialBlogs = [
-  {
-    title: 'HTML Lifestyle',
-    author: 'Developer Trends',
-    url: 'https://placeholder.dev/blog',
-    likes: 0,
-  },
-  {
-    title: 'Rust Blog',
-    author: 'Rust Teams',
-    url: 'https://blog.rust-lang.org/',
-    likes: 9001,
-  },
-]
-
-
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let blogObject = new Blog(initialBlogs[0])
-  await blogObject.save()
-  blogObject = new Blog(initialBlogs[1])
-  await blogObject.save()
+  await Blog.insertMany(helper.initialBlogs)
 })
 
 test('blogs are returned as json', async () => {
