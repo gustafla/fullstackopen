@@ -14,12 +14,10 @@ const reduceMaxByAuthor = (blogs, count) => {
   return blogs.reduce((list, blog) => {
     const author_element = list.find(e => e.author === blog.author)
     if (author_element) {
-      console.log('found', author_element)
       author_element.count += count(blog)
       return list
     } else {
       const new_element = { author: blog.author, count: count(blog) }
-      console.log('creating', new_element)
       return list.concat(new_element)
     }
   }, []).reduce((a, b) => a.count > b.count ? a : b)
