@@ -39,6 +39,30 @@ test('blogs have id fields', async () => {
   }
 })
 
+test('post adds blogs', async () => {
+  const newblog = {
+    title: 'Hello World',
+    author: 'Testaaja',
+    url: 'http://localhost',
+    likes: 42,
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newblog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  expect(response.body.title).toContain('Hello World')
+  expect(response.body.author).toContain('Testaaja')
+  expect(response.body.url).toContain('http://localhost')
+  expect(response.body.likes).toBe(42)
+
+  const getResponse = await api.get('/api/blogs')
+  expect(getResponse.body).toHaveLength(3)
+
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
