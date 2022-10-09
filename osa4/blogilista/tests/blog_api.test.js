@@ -31,6 +31,14 @@ test('a specific blog is within the returned blogs', async () => {
   expect(contents).toContain('Rust Blog')
 })
 
+test('blogs have id fields', async () => {
+  const response = await api.get('/api/blogs')
+
+  for (const blog of response.body) {
+    expect(blog.id).toBeDefined()
+  }
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
