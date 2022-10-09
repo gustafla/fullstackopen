@@ -22,7 +22,7 @@ describe('when there is initially one user at db', () => {
     for (const user of response.body) {
       expect(user.username).toBeDefined()
       expect(user.id).toBeDefined()
-      expect(user.blogs).not.toBeDefined()
+      expect(user.blogs).toBeDefined()
       expect(user.passwordHash).not.toBeDefined()
       expect(user._id).not.toBeDefined()
       expect(user.__v).not.toBeDefined()
