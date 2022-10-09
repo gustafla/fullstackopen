@@ -55,9 +55,9 @@ describe('when there are initially some blogs saved', () => {
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
-      expect(response.body.title).toContain('Hello World')
-      expect(response.body.author).toContain('Testaaja')
-      expect(response.body.url).toContain('http://localhost')
+      expect(response.body.title).toBe('Hello World')
+      expect(response.body.author).toBe('Testaaja')
+      expect(response.body.url).toBe('http://localhost')
       expect(response.body.likes).toBe(42)
 
       const getResponse = await api.get('/api/blogs')
@@ -77,9 +77,9 @@ describe('when there are initially some blogs saved', () => {
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
-      expect(response.body.title).toContain('Hello World 2')
-      expect(response.body.author).toContain('Testaajat')
-      expect(response.body.url).toContain('http://testserver.lan')
+      expect(response.body.title).toBe('Hello World 2')
+      expect(response.body.author).toBe('Testaajat')
+      expect(response.body.url).toBe('http://testserver.lan')
       expect(response.body.likes).toBe(0)
 
       const getResponse = await api.get('/api/blogs')
@@ -145,6 +145,67 @@ describe('when there are initially some blogs saved', () => {
 
       const blogsAfter = await helper.blogsInDb()
       expect(blogsAfter).toHaveLength(blogs.length)
+    })
+  })
+
+  describe('requesting changes to a blog', () => {
+    test('succeeds if valid id and likes', async () => {
+      const blogs = await helper.blogsInDb()
+      const blog = blogs[0]
+      const changedBlog = { ...blog, likes: 900 }
+
+      await api.put(`/api/blogs/${blog.id}`).send(changedBlog).expect(200)
+
+      const blogsAfter = await helper.blogsInDb()
+      expect(blogsAfter).toContainEqual(changedBlog)
+      expect(blogsAfter).not.toContainEqual(blog)
+    })
+
+    test('fails if invalid id', async () => {
+      const blogs = await helper.blogsInDb()
+      const blog = blogs[0]
+      const changedBlog = { ...blog, likes: 900 }
+
+      await api.put(`/api/blogs/${blog.id + 'asdf'}`).send(changedBlog).expect(400)
+
+      const blogsAfter = await helper.blogsInDb()
+      expect(blogsAfter).not.toContainEqual(changedBlog)
+      expect(blogsAfter).toContainEqual(blog)
+    })
+
+    test('fails without likes', async () => {
+      const blogs = await helper.blogsInDb()
+      const blog = blogs[0]
+
+      await api.put(`/api/blogs/${blog.id}`).send({}).expect(400)
+
+      const blogsAfter = await helper.blogsInDb()
+      expect(blogsAfter).toContainEqual(blog)
+    })
+
+    test('changes nothing but likes', async () => {
+      const blogs = await helper.blogsInDb()
+      const blog = blogs[0]
+      const fakeId = helper.nonExistingId()
+      const changedBlog = {
+        title: '123',
+        author: '123',
+        url: '123',
+        likes: blog.likes + 32,
+        _id: fakeId,
+        id: fakeId,
+      }
+
+      const response = await api.put(`/api/blogs/${blog.id}`).send(changedBlog).expect(200)
+
+      expect(response.body.title).toBe(blog.title)
+      expect(response.body.author).toBe(blog.author)
+      expect(response.body.url).toBe(blog.url)
+      expect(response.body.likes).toBe(blog.likes + 32)
+
+      const blogsAfter = await helper.blogsInDb()
+      const expectedBlog = { ...blog, likes: blog.likes + 32 }
+      expect(blogsAfter).toContainEqual(expectedBlog)
     })
   })
 })
