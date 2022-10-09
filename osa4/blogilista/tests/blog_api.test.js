@@ -117,6 +117,36 @@ describe('when there are initially some blogs saved', () => {
       expect(getResponse.body).toHaveLength(2)
     })
   })
+
+  describe('deletion of a blog', () => {
+    test('succeeds with status 204 if valid id', async () => {
+      const blogs = await helper.blogsInDb()
+      const deleteBlog = blogs[1]
+
+      await api.delete(`/api/blogs/${deleteBlog.id}`).expect(204)
+
+      const blogsAfter = await helper.blogsInDb()
+      expect(blogsAfter).toHaveLength(blogs.length - 1)
+
+      expect(blogsAfter.map(b => b.title)).not.toContain(deleteBlog.title)
+
+      // Should respond 204 again
+      await api.delete(`/api/blogs/${deleteBlog.id}`).expect(204)
+
+      const blogsAfterTwice = await helper.blogsInDb()
+      expect(blogsAfterTwice).toHaveLength(blogs.length - 1)
+    })
+
+    test('fails with status 400 if invalid id', async () => {
+      const blogs = await helper.blogsInDb()
+      const deleteBlogId = blogs[1].id + 'asdf'
+
+      await api.delete(`/api/blogs/${deleteBlogId}`).expect(400)
+
+      const blogsAfter = await helper.blogsInDb()
+      expect(blogsAfter).toHaveLength(blogs.length)
+    })
+  })
 })
 
 afterAll(() => {
