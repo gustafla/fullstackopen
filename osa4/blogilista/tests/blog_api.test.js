@@ -60,7 +60,59 @@ test('post adds blogs', async () => {
 
   const getResponse = await api.get('/api/blogs')
   expect(getResponse.body).toHaveLength(3)
+})
 
+test('post without likes creates blog with zero likes', async () => {
+  const newblog = {
+    title: 'Hello World 2',
+    author: 'Testaajat',
+    url: 'http://testserver.lan',
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newblog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  expect(response.body.title).toContain('Hello World 2')
+  expect(response.body.author).toContain('Testaajat')
+  expect(response.body.url).toContain('http://testserver.lan')
+  expect(response.body.likes).toBe(0)
+
+  const getResponse = await api.get('/api/blogs')
+  expect(getResponse.body).toHaveLength(3)
+})
+
+test('post without title results in bad request', async () => {
+  const newblog = {
+    author: 'Testaajat',
+    url: 'http://gamer.cool',
+  }
+
+  await api.post('/api/blogs').send(newblog).expect(400)
+
+  const getResponse = await api.get('/api/blogs')
+  expect(getResponse.body).toHaveLength(2)
+})
+
+test('post without url results in bad request', async () => {
+  const newblog = {
+    title: 'Lost and directionless',
+    author: 'Testaajat',
+  }
+
+  await api.post('/api/blogs').send(newblog).expect(400)
+
+  const getResponse = await api.get('/api/blogs')
+  expect(getResponse.body).toHaveLength(2)
+})
+
+test('post without fields results in bad request', async () => {
+  await api.post('/api/blogs').send({}).expect(400)
+
+  const getResponse = await api.get('/api/blogs')
+  expect(getResponse.body).toHaveLength(2)
 })
 
 afterAll(() => {
