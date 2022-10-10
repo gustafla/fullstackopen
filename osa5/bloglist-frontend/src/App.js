@@ -3,16 +3,24 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
-const Login = ({ handleLogin }) => {
+const sessionItem = 'loggedUser'
+
+const Login = ({ logUserIn }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  // Post login to backend
   const handleSubmit = async (event) => {
     event.preventDefault()
-    if (await handleLogin(username, password)) {
+    console.log('logging in', username, password)
+    try {
+      const user = await loginService.login({ username, password })
+      window.localStorage.setItem(sessionItem, JSON.stringify(user))
+      logUserIn(user)
       setUsername('')
       setPassword('')
-    } else {
+    } catch (exception) {
+      console.error('login failed', exception)
       alert('Username or password incorrect')
     }
   }
@@ -45,9 +53,68 @@ const Login = ({ handleLogin }) => {
   )
 }
 
+const CreateBlog = ({ addBlog }) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  // Post blog to backend
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    try {
+      const blog = { title, author, url }
+      const newBlog = await blogService.create(blog)
+      addBlog(newBlog)
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch (exception) {
+      console.error('post failed', exception)
+      alert(exception.response.data.error)
+    }
+  }
+
+  return (
+    <div>
+      <h2>create new</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          title:
+          <input
+            type='text'
+            value={title}
+            name='title'
+            onChange={({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
+          author:
+          <input
+            type='text'
+            value={author}
+            name='author'
+            onChange={({ target }) => setAuthor(target.value)}
+          />
+        </div>
+        <div>
+          url:
+          <input
+            type='text'
+            value={url}
+            name='url'
+            onChange={({ target }) => setUrl(target.value)}
+          />
+        </div>
+        <button type='submit'>create</button>
+      </form>
+    </div>
+  )
+}
+
 const Blogs = () => {
   const [blogs, setBlogs] = useState([])
 
+  // Load blog list from backend
   useEffect(() => {
     (async () => {
       const blogs = await blogService.getAll()
@@ -57,6 +124,7 @@ const Blogs = () => {
 
   return (
     <div>
+      <CreateBlog addBlog={blog => setBlogs(blogs.concat(blog))} />
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
@@ -83,32 +151,18 @@ const App = () => {
 
   // Load session from localstorage
   useEffect(() => {
-    const loggedUserJson = window.localStorage.getItem('loggedUser')
+    const loggedUserJson = window.localStorage.getItem(sessionItem)
     if (loggedUserJson) {
       const user = JSON.parse(loggedUserJson)
       logUserIn(user)
     }
   }, [])
 
-  // Handles login component's attempts, saves to localstorage when successful
-  const handleLogin = async (username, password) => {
-    console.log('logging in', username, password)
-    try {
-      const user = await loginService.login({ username, password })
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      logUserIn(user)
-      return true
-    } catch (exception) {
-      console.log('login failed', exception)
-    }
-    return false
-  }
-
-  // Render login when not logged in
   return (
     <div>
       {user === null ?
-        <Login handleLogin={handleLogin} />
+        // Render login when not logged in
+        <Login logUserIn={logUserIn} />
         : <div>
           {user.name ? user.name : user.username} logged in
           <button type='button' onClick={logUserOut}>logout</button>
