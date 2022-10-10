@@ -45,10 +45,18 @@ const Login = ({ handleLogin }) => {
   )
 }
 
-const Blogs = ({ user, blogs }) => {
+const Blogs = () => {
+  const [blogs, setBlogs] = useState([])
+
+  useEffect(() => {
+    (async () => {
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
+    })()
+  }, [])
+
   return (
     <div>
-      <p>{user.name ? user.name : user.username} logged in</p>
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
@@ -58,24 +66,37 @@ const Blogs = ({ user, blogs }) => {
 }
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
-  useEffect(() => {
-    if (user) {
-      (async () => {
-        const blogs = await blogService.getAll()
-        setBlogs(blogs)
-      })()
-    }
-  }, [user])
+  // Helper that sets all login state except for localstorage
+  const logUserIn = user => {
+    blogService.setToken(user.token)
+    setUser(user)
+  }
 
+  // Removes all user login state from the application
+  const logUserOut = () => {
+    blogService.setToken(null)
+    setUser(null)
+    window.localStorage.clear()
+  }
+
+  // Load session from localstorage
+  useEffect(() => {
+    const loggedUserJson = window.localStorage.getItem('loggedUser')
+    if (loggedUserJson) {
+      const user = JSON.parse(loggedUserJson)
+      logUserIn(user)
+    }
+  }, [])
+
+  // Handles login component's attempts, saves to localstorage when successful
   const handleLogin = async (username, password) => {
     console.log('logging in', username, password)
     try {
       const user = await loginService.login({ username, password })
-      blogService.setToken(user.token)
-      setUser(user)
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      logUserIn(user)
       return true
     } catch (exception) {
       console.log('login failed', exception)
@@ -83,14 +104,19 @@ const App = () => {
     return false
   }
 
+  // Render login when not logged in
   return (
     <div>
       {user === null ?
         <Login handleLogin={handleLogin} />
-        : <Blogs user={user} blogs={blogs} />}
+        : <div>
+          {user.name ? user.name : user.username} logged in
+          <button type='button' onClick={logUserOut}>logout</button>
+          <Blogs />
+        </div>
+      }
     </div>
   )
-
 }
 
 export default App
