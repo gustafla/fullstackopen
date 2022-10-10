@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import blogService from '../services/blogs'
 
-const CreateBlog = ({ addBlog, setSuccess, setError }) => {
+const CreateBlog = ({ addBlog, notificationControl }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -13,13 +13,13 @@ const CreateBlog = ({ addBlog, setSuccess, setError }) => {
       const blog = { title, author, url }
       const newBlog = await blogService.create(blog)
       addBlog(newBlog)
-      setSuccess(`${title} by ${author} added!`)
+      notificationControl.setSuccess(`${title} by ${author} added!`)
       setTitle('')
       setAuthor('')
       setUrl('')
     } catch (exception) {
       console.error('post failed', exception)
-      setError(exception.response.data.error)
+      notificationControl.setError(exception.response.data.error)
     }
   }
 
@@ -66,7 +66,7 @@ const Blog = ({ blog }) => (
   </div>
 )
 
-const Blogs = ({ setSuccess, setError }) => {
+const Blogs = ({ notificationControl }) => {
   const [blogs, setBlogs] = useState([])
 
   // Load blog list from backend
@@ -79,7 +79,7 @@ const Blogs = ({ setSuccess, setError }) => {
 
   return (
     <div>
-      <CreateBlog addBlog={blog => setBlogs(blogs.concat(blog))} setSuccess={setSuccess} setError={setError} />
+      <CreateBlog addBlog={blog => setBlogs(blogs.concat(blog))} notificationControl={notificationControl} />
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />

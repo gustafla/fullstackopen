@@ -10,6 +10,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [success, setSuccess] = useState(null)
   const [error, setError] = useState(null)
+  const notificationControl = { setSuccess, setError }
 
   // Helper that sets all login state except for localstorage
   const logUserIn = user => {
@@ -23,7 +24,7 @@ const App = () => {
     blogService.setToken(null)
     setUser(null)
     window.localStorage.clear()
-    setSuccess('Logged out')
+    notificationControl.setSuccess('Logged out')
   }
 
   // Load session from localstorage
@@ -41,11 +42,11 @@ const App = () => {
       <Notification className={'error'} message={error} setMessage={setError} />
       {user === null ?
         // Render login when not logged in
-        <Login logUserIn={logUserIn} setError={setError} />
+        <Login logUserIn={logUserIn} notificationControl={notificationControl} />
         : <div>
           {user.name ? user.name : user.username} logged in
           <button type='button' onClick={logUserOut}>logout</button>
-          <Blogs setSuccess={setSuccess} setError={setError} />
+          <Blogs notificationControl={notificationControl} />
         </div>
       }
     </div>
