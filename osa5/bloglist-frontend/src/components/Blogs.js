@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import blogService from '../services/blogs'
 
-const CreateBlog = ({ addBlog }) => {
+const CreateBlog = ({ addBlog, setSuccess, setError }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -13,12 +13,13 @@ const CreateBlog = ({ addBlog }) => {
       const blog = { title, author, url }
       const newBlog = await blogService.create(blog)
       addBlog(newBlog)
+      setSuccess(`${title} by ${author} added!`)
       setTitle('')
       setAuthor('')
       setUrl('')
     } catch (exception) {
       console.error('post failed', exception)
-      alert(exception.response.data.error)
+      setError(exception.response.data.error)
     }
   }
 
@@ -65,7 +66,7 @@ const Blog = ({ blog }) => (
   </div>
 )
 
-const Blogs = () => {
+const Blogs = ({ setSuccess, setError }) => {
   const [blogs, setBlogs] = useState([])
 
   // Load blog list from backend
@@ -78,7 +79,7 @@ const Blogs = () => {
 
   return (
     <div>
-      <CreateBlog addBlog={blog => setBlogs(blogs.concat(blog))} />
+      <CreateBlog addBlog={blog => setBlogs(blogs.concat(blog))} setSuccess={setSuccess} setError={setError} />
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
