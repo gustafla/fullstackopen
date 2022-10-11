@@ -60,17 +60,25 @@ const CreateBlog = forwardRef(({ addBlog }, ref) => {
   )
 })
 
-const BlogDetails = ({ blog, handleLike }) => {
+const BlogDetails = ({ blog, handleLike, handleRemove, user }) => {
   return (
     <div>
       <p>{blog.url}</p>
-      <p>likes {blog.likes} <button type='button' onClick={handleLike}>like</button></p>
-      <p>{blog.user ? (blog.user.name ? blog.user.name : blog.user.nickname) : null}</p>
+      <p>
+        likes {blog.likes}
+        <button type='button' onClick={handleLike}>like</button>
+      </p>
+      {blog.user ?
+        <p>{blog.user.name ? blog.user.name : blog.user.username}</p>
+        : null}
+      {(!blog.user || blog.user.username === user.username) ?
+        <button type='button' onClick={handleRemove}>remove</button>
+        : null}
     </div>
   )
 }
 
-const Blog = ({ blog, handleLike }) => {
+const Blog = ({ blog, handleLike, handleRemove, user }) => {
   const divStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -88,12 +96,18 @@ const Blog = ({ blog, handleLike }) => {
   return (
     <div style={divStyle} onClick={toggleShow}>
       <b>{blog.title}</b> by {blog.author}
-      {showAll ? <BlogDetails blog={blog} handleLike={handleLike} /> : null}
+      {showAll ?
+        <BlogDetails
+          blog={blog}
+          handleLike={handleLike}
+          handleRemove={handleRemove}
+          user={user}
+        /> : null}
     </div>
   )
 }
 
-const Blogs = () => {
+const Blogs = ({ user }) => {
   const [blogs, setBlogs] = useState([])
 
   // Load blog list from backend
@@ -110,10 +124,18 @@ const Blogs = () => {
       const newBlog = await blogService.update(likedBlog)
       setBlogs(blogs.map(b => b.id === newBlog.id ? newBlog : b))
     } catch (exception) {
-      console.log('like failed', exception)
+      console.error('like failed', exception)
     }
   }
 
+  const handleRemove = async (blog) => {
+    try {
+      await blogService.remove(blog)
+      setBlogs(blogs.filter(b => b.id !== blog.id))
+    } catch (exception) {
+      console.error('remove failed', exception)
+    }
+  }
 
   // Mediate access to Togglable's toggleVisibility from CreateBlog
   const blogFormRef = useRef()
@@ -121,11 +143,20 @@ const Blogs = () => {
   return (
     <div>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <CreateBlog addBlog={blog => setBlogs(blogs.concat(blog))} ref={blogFormRef} />
+        <CreateBlog
+          addBlog={blog => setBlogs(blogs.concat(blog))}
+          ref={blogFormRef}
+        />
       </Togglable>
       <h2>blogs</h2>
       {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog)} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          handleLike={() => handleLike(blog)}
+          handleRemove={() => handleRemove(blog)}
+          user={user}
+        />
       )}
     </div>
   )

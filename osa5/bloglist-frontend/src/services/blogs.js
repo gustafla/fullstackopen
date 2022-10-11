@@ -57,4 +57,17 @@ const update = async (blog) => {
   return response.data
 }
 
-export default { setToken, setExpiredHandler, setNotificationControl, getAll, create, update }
+const remove = async (blog) => {
+  await instance.delete(`${baseUrl}/${blog.id}`)
+  notificationControl && notificationControl.setSuccess(`${blog.title} by ${blog.author} removed!`)
+}
+
+export default {
+  setToken,
+  setExpiredHandler,
+  setNotificationControl,
+  getAll,
+  create,
+  update,
+  remove
+}

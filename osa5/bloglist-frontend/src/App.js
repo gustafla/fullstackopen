@@ -49,7 +49,7 @@ const App = () => {
         <div>
           {user.name ? user.name : user.username} logged in
           <button type='button' onClick={logUserOut}>logout</button>
-          <Blogs notificationControl={notificationControl} />
+          <Blogs user={user} />
         </div>
         // Render login when not logged in
         : <Login logUserIn={logUserIn} notificationControl={notificationControl} />
