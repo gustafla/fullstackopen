@@ -10,12 +10,26 @@ const User = require('../models/user')
 // Authorization token for api usage
 let authorization
 
-beforeEach(async () => {
-  // Create a user in db
-  await User.deleteMany({})
-  const passwordHash = await bcrypt.hash('sekret', 10)
-  let user = new User({ username: 'root', passwordHash })
+const createUser = async (username, password) => {
+  const passwordHash = await bcrypt.hash(password, 10)
+  let user = new User({ username, passwordHash })
   user = await user.save()
+  return user
+}
+
+const logUserIn = async (username, password) => {
+  const response = await api
+    .post('/api/login')
+    .send({ username, password })
+    .expect(200)
+  return { Authorization: `Bearer ${response.body.token}` }
+}
+
+beforeEach(async () => {
+  // Create users in db
+  await User.deleteMany({})
+  const [username, password] = ['lauri', 'password']
+  let user = await createUser(username, password)
 
   // Create blogs for the new user
   await Blog.deleteMany({})
@@ -27,11 +41,7 @@ beforeEach(async () => {
   user = await user.save()
 
   // Get a valid auth for user
-  const response = await api
-    .post('/api/login')
-    .send({ username: 'root', password: 'sekret' })
-    .expect(200)
-  authorization = { Authorization: `Bearer ${response.body.token}` }
+  authorization = await logUserIn(username, password)
 })
 
 describe('when there are initially some blogs saved', () => {
@@ -291,6 +301,22 @@ describe('when there are initially some blogs saved', () => {
       const blogsAfter = await helper.blogsInDb()
       const expectedBlog = { ...blog, likes: blog.likes + 32 }
       expect(blogsAfter).toContainEqual(expectedBlog)
+    })
+
+    test('users can like each others posts', async () => {
+      await createUser('root', 'sekret')
+      const rootAuthorization = await logUserIn('root', 'sekret')
+      const blogs = await helper.blogsInDb()
+      const blog = blogs[0]
+      const likedBlog = { ...blog, likes: blog.likes + 1 }
+
+      const response = await api
+        .put(`/api/blogs/${blog.id}`)
+        .set(rootAuthorization)
+        .send(likedBlog)
+        .expect(200)
+
+      expect(response.body.likes).toBe(likedBlog.likes)
     })
   })
 })
