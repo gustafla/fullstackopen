@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, forwardRef } from 'react'
 import blogService from '../services/blogs'
+import Togglable from './Togglable'
 
-const CreateBlog = ({ addBlog, notificationControl }) => {
+const CreateBlog = forwardRef(({ addBlog, notificationControl }, ref) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -17,6 +18,7 @@ const CreateBlog = ({ addBlog, notificationControl }) => {
       setTitle('')
       setAuthor('')
       setUrl('')
+      ref.current.toggleVisibility()
     } catch (exception) {
       console.error('post failed', exception)
       notificationControl.setError(exception.response.data.error)
@@ -58,7 +60,7 @@ const CreateBlog = ({ addBlog, notificationControl }) => {
       </form>
     </div>
   )
-}
+})
 
 const Blog = ({ blog }) => (
   <div>
@@ -68,6 +70,8 @@ const Blog = ({ blog }) => (
 
 const Blogs = ({ notificationControl }) => {
   const [blogs, setBlogs] = useState([])
+
+  const blogFormRef = useRef()
 
   // Load blog list from backend
   useEffect(() => {
@@ -79,7 +83,9 @@ const Blogs = ({ notificationControl }) => {
 
   return (
     <div>
-      <CreateBlog addBlog={blog => setBlogs(blogs.concat(blog))} notificationControl={notificationControl} />
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+        <CreateBlog addBlog={blog => setBlogs(blogs.concat(blog))} notificationControl={notificationControl} ref={blogFormRef} />
+      </Togglable>
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
