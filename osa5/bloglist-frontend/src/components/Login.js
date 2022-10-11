@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import loginService from '../services/login'
 
-const Login = ({ logUserIn, notificationControl }) => {
+const Login = ({ logUserIn }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -16,7 +16,6 @@ const Login = ({ logUserIn, notificationControl }) => {
       setPassword('')
     } catch (exception) {
       console.error('login failed', exception)
-      notificationControl.setError('Username or password incorrect')
     }
   }
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, forwardRef } from 'react'
 import blogService from '../services/blogs'
 import Togglable from './Togglable'
 
-const CreateBlog = forwardRef(({ addBlog, notificationControl }, ref) => {
+const CreateBlog = forwardRef(({ addBlog }, ref) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -14,14 +14,12 @@ const CreateBlog = forwardRef(({ addBlog, notificationControl }, ref) => {
       const blog = { title, author, url }
       const newBlog = await blogService.create(blog)
       addBlog(newBlog)
-      notificationControl.setSuccess(`${title} by ${author} added!`)
       setTitle('')
       setAuthor('')
       setUrl('')
       ref && ref.current.toggleVisibility()
     } catch (exception) {
       console.error('post failed', exception)
-      notificationControl.setError(exception.response.data.error)
     }
   }
 
@@ -62,15 +60,17 @@ const CreateBlog = forwardRef(({ addBlog, notificationControl }, ref) => {
   )
 })
 
-const BlogDetails = ({ blog }) => (
-  <div>
-    <p>{blog.url}</p>
-    <p>likes {blog.likes} <button>like</button></p>
-    <p>{blog.user ? (blog.user.name ? blog.user.name : blog.user.nickname) : null}</p>
-  </div>
-)
+const BlogDetails = ({ blog, handleLike }) => {
+  return (
+    <div>
+      <p>{blog.url}</p>
+      <p>likes {blog.likes} <button type='button' onClick={handleLike}>like</button></p>
+      <p>{blog.user ? (blog.user.name ? blog.user.name : blog.user.nickname) : null}</p>
+    </div>
+  )
+}
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLike }) => {
   const divStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -88,12 +88,12 @@ const Blog = ({ blog }) => {
   return (
     <div style={divStyle} onClick={toggleShow}>
       <b>{blog.title}</b> by {blog.author}
-      {showAll ? <BlogDetails blog={blog} /> : null}
+      {showAll ? <BlogDetails blog={blog} handleLike={handleLike} /> : null}
     </div>
   )
 }
 
-const Blogs = ({ notificationControl }) => {
+const Blogs = () => {
   const [blogs, setBlogs] = useState([])
 
   // Load blog list from backend
@@ -104,17 +104,28 @@ const Blogs = ({ notificationControl }) => {
     })()
   }, [])
 
+  const handleLike = async (blog) => {
+    const likedBlog = { ...blog, likes: blog.likes + 1 }
+    try {
+      const newBlog = await blogService.update(likedBlog)
+      setBlogs(blogs.map(b => b.id === newBlog.id ? newBlog : b))
+    } catch (exception) {
+      console.log('like failed', exception)
+    }
+  }
+
+
   // Mediate access to Togglable's toggleVisibility from CreateBlog
   const blogFormRef = useRef()
 
   return (
     <div>
       <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <CreateBlog addBlog={blog => setBlogs(blogs.concat(blog))} notificationControl={notificationControl} ref={blogFormRef} />
+        <CreateBlog addBlog={blog => setBlogs(blogs.concat(blog))} ref={blogFormRef} />
       </Togglable>
       <h2>blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
+        <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog)} />
       )}
     </div>
   )
