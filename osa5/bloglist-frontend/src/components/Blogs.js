@@ -62,11 +62,36 @@ const CreateBlog = forwardRef(({ addBlog, notificationControl }, ref) => {
   )
 })
 
-const Blog = ({ blog }) => (
+const BlogDetails = ({ blog }) => (
   <div>
-    {blog.title} {blog.author}
+    <p>{blog.url}</p>
+    <p>likes {blog.likes} <button>like</button></p>
+    <p>{blog.user ? (blog.user.name ? blog.user.name : blog.user.nickname) : null}</p>
   </div>
 )
+
+const Blog = ({ blog }) => {
+  const divStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
+
+  const [showAll, setShowAll] = useState(false)
+
+  const toggleShow = () => {
+    setShowAll(!showAll)
+  }
+
+  return (
+    <div style={divStyle} onClick={toggleShow}>
+      <b>{blog.title}</b> by {blog.author}
+      {showAll ? <BlogDetails blog={blog} /> : null}
+    </div>
+  )
+}
 
 const Blogs = ({ notificationControl }) => {
   const [blogs, setBlogs] = useState([])
