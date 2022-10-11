@@ -12,19 +12,20 @@ const App = () => {
   const [error, setError] = useState(null)
   const notificationControl = { setSuccess, setError }
 
-  // Helper that sets all login state except for localstorage
-  const logUserIn = user => {
-    window.localStorage.setItem(sessionItem, JSON.stringify(user))
-    blogService.setToken(user.token)
-    setUser(user)
-  }
-
   // Removes all user login state from the application
   const logUserOut = () => {
     blogService.setToken(null)
     setUser(null)
     window.localStorage.clear()
     notificationControl.setSuccess('Logged out')
+  }
+
+  // Helper that sets all login state
+  const logUserIn = user => {
+    window.localStorage.setItem(sessionItem, JSON.stringify(user))
+    blogService.setToken(user.token)
+    blogService.setExpiredHandler(logUserOut)
+    setUser(user)
   }
 
   // Load session from localstorage
