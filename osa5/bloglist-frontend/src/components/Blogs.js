@@ -129,11 +129,13 @@ const Blogs = ({ user }) => {
   }
 
   const handleRemove = async (blog) => {
-    try {
-      await blogService.remove(blog)
-      setBlogs(blogs.filter(b => b.id !== blog.id))
-    } catch (exception) {
-      console.error('remove failed', exception)
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      try {
+        await blogService.remove(blog)
+        setBlogs(blogs.filter(b => b.id !== blog.id))
+      } catch (exception) {
+        console.error('remove failed', exception)
+      }
     }
   }
 
