@@ -18,7 +18,7 @@ const CreateBlog = forwardRef(({ addBlog, notificationControl }, ref) => {
       setTitle('')
       setAuthor('')
       setUrl('')
-      ref.current.toggleVisibility()
+      ref && ref.current.toggleVisibility()
     } catch (exception) {
       console.error('post failed', exception)
       notificationControl.setError(exception.response.data.error)
@@ -71,8 +71,6 @@ const Blog = ({ blog }) => (
 const Blogs = ({ notificationControl }) => {
   const [blogs, setBlogs] = useState([])
 
-  const blogFormRef = useRef()
-
   // Load blog list from backend
   useEffect(() => {
     (async () => {
@@ -80,6 +78,9 @@ const Blogs = ({ notificationControl }) => {
       setBlogs(blogs)
     })()
   }, [])
+
+  // Mediate access to Togglable's toggleVisibility from CreateBlog
+  const blogFormRef = useRef()
 
   return (
     <div>
