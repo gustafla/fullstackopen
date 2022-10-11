@@ -33,7 +33,7 @@ blogsRouter.delete('/:id', async (request, response) => {
 
   const result = await Blog.findById(id)
   if (result) {
-    if (result.user.toString() !== user._id.toString()) {
+    if (result.user && result.user.toString() !== user._id.toString()) {
       return response.status(401).json({ error: 'token does not authorize for this resource' })
     }
     await result.remove()
