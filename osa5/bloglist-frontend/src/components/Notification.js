@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import PropTypes from 'prop-types'
 
 const Notification = ({ className, message, setMessage }) => {
   useEffect(() => {
@@ -12,6 +13,12 @@ const Notification = ({ className, message, setMessage }) => {
   return (
     <div className={`notification ${className}`}>{message}</div>
   )
+}
+
+Notification.propTypes = {
+  className: PropTypes.string.isRequired,
+  message: PropTypes.string,
+  setMessage: PropTypes.func.isRequired,
 }
 
 export default Notification

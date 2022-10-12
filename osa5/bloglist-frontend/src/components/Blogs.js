@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, forwardRef } from 'react'
 import blogService from '../services/blogs'
 import Togglable from './Togglable'
+import PropTypes from 'prop-types'
 
 const CreateBlog = forwardRef(({ addBlog }, ref) => {
   const [title, setTitle] = useState('')
@@ -60,6 +61,12 @@ const CreateBlog = forwardRef(({ addBlog }, ref) => {
   )
 })
 
+CreateBlog.displayName = 'CreateBlog'
+
+CreateBlog.propTypes = {
+  addBlog: PropTypes.func.isRequired
+}
+
 const BlogDetails = ({ blog, handleLike, handleRemove, user }) => {
   return (
     <div>
@@ -76,6 +83,13 @@ const BlogDetails = ({ blog, handleLike, handleRemove, user }) => {
         : null}
     </div>
   )
+}
+
+BlogDetails.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleRemove: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 const Blog = ({ blog, handleLike, handleRemove, user }) => {
@@ -105,6 +119,13 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
         /> : null}
     </div>
   )
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  handleLike: PropTypes.func.isRequired,
+  handleRemove: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 const Blogs = ({ user }) => {
@@ -144,7 +165,7 @@ const Blogs = ({ user }) => {
 
   return (
     <div>
-      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+      <Togglable buttonLabel='new blog' ref={blogFormRef}>
         <CreateBlog
           addBlog={blog => setBlogs(blogs.concat(blog))}
           ref={blogFormRef}
@@ -162,6 +183,10 @@ const Blogs = ({ user }) => {
       )}
     </div>
   )
+}
+
+Blogs.propTypes = {
+  user: PropTypes.object.isRequired,
 }
 
 export default Blogs

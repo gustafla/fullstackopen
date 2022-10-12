@@ -62,7 +62,9 @@ const remove = async (blog) => {
   notificationControl && notificationControl.setSuccess(`${blog.title} by ${blog.author} removed!`)
 }
 
-export default {
+
+
+const blogService = {
   setToken,
   setExpiredHandler,
   setNotificationControl,
@@ -71,3 +73,5 @@ export default {
   update,
   remove
 }
+
+export default blogService

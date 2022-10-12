@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import Login from './components/Login'
 import Blogs from './components/Blogs'
 import Notification from './components/Notification'
@@ -11,24 +11,24 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [success, setSuccess] = useState(null)
   const [error, setError] = useState(null)
-  const notificationControl = { setSuccess, setError }
+  const notificationControl = useMemo(() => ({ setSuccess, setError }), [setSuccess, setError])
 
   // Removes all user login state from the application
-  const logUserOut = () => {
+  const logUserOut = useCallback(() => {
     blogService.setToken(null)
     setUser(null)
     window.localStorage.clear()
     notificationControl.setSuccess('Logged out')
-  }
+  }, [notificationControl])
 
   // Helper that sets all login state
-  const logUserIn = user => {
+  const logUserIn = useCallback(user => {
     window.localStorage.setItem(sessionItem, JSON.stringify(user))
     blogService.setToken(user.token)
     blogService.setExpiredHandler(logUserOut)
     setUser(user)
     notificationControl.setSuccess('Logged in')
-  }
+  }, [logUserOut, notificationControl])
 
   // Load session from localstorage and setup notifications
   useEffect(() => {
@@ -39,7 +39,7 @@ const App = () => {
     }
     blogService.setNotificationControl(notificationControl)
     loginService.setNotificationControl(notificationControl)
-  }, [])
+  }, [logUserIn, notificationControl])
 
   return (
     <div>

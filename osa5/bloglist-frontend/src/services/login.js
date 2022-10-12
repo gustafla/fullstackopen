@@ -17,4 +17,6 @@ const login = async credentials => {
   }
 }
 
-export default { setNotificationControl, login }
+const loginService = { setNotificationControl, login }
+
+export default loginService
