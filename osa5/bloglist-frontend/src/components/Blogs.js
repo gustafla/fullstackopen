@@ -37,6 +37,11 @@ const Blogs = ({ user }) => {
     }
   }
 
+  const addBlog = async (blog) => {
+    const newBlog = await blogService.create(blog)
+    setBlogs(blogs.concat(newBlog))
+  }
+
   // Mediate access to Togglable's toggleVisibility from CreateBlog
   const blogFormRef = useRef()
 
@@ -44,7 +49,7 @@ const Blogs = ({ user }) => {
     <div>
       <Togglable buttonLabel='new blog' ref={blogFormRef}>
         <CreateBlog
-          addBlog={blog => setBlogs(blogs.concat(blog))}
+          addBlog={addBlog}
           ref={blogFormRef}
         />
       </Togglable>

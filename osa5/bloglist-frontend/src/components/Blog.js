@@ -2,17 +2,24 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const BlogDetails = ({ blog, handleLike, handleRemove, user }) => {
+  const handleLikeButton = (event) => {
+    // Stop like-click from propagating to the blog div
+    // so it doesn't collapse itself
+    event.stopPropagation()
+    handleLike()
+  }
+
   return (
     <div>
       <p>{blog.url}</p>
       <p>
         likes {blog.likes}
-        <button type='button' onClick={handleLike}>like</button>
+        <button type='button' onClick={handleLikeButton}>like</button>
       </p>
       {blog.user ?
         <p>{blog.user.name ? blog.user.name : blog.user.username}</p>
         : null}
-      {(!blog.user || blog.user.username === user.username) ?
+      {(!blog.user || (user && blog.user.username === user.username)) ?
         <button type='button' onClick={handleRemove}>remove</button>
         : null}
     </div>
@@ -23,7 +30,7 @@ BlogDetails.propTypes = {
   blog: PropTypes.object.isRequired,
   handleLike: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
 }
 
 const Blog = ({ blog, handleLike, handleRemove, user }) => {
@@ -42,8 +49,8 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
   }
 
   return (
-    <div style={divStyle} onClick={toggleShow}>
-      <b>{blog.title}</b> by {blog.author}
+    <div style={divStyle} onClick={toggleShow} className='blog'>
+      <p className='blogTitle'><b>{blog.title}</b> by {blog.author}</p>
       {showAll ?
         <BlogDetails
           blog={blog}
@@ -59,7 +66,7 @@ Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   handleLike: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
 }
 
 export default Blog

@@ -1,5 +1,4 @@
 import { useState, forwardRef } from 'react'
-import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
 const CreateBlog = forwardRef(({ addBlog }, ref) => {
@@ -12,8 +11,7 @@ const CreateBlog = forwardRef(({ addBlog }, ref) => {
     event.preventDefault()
     try {
       const blog = { title, author, url }
-      const newBlog = await blogService.create(blog)
-      addBlog(newBlog)
+      await addBlog(blog)
       setTitle('')
       setAuthor('')
       setUrl('')
@@ -33,6 +31,7 @@ const CreateBlog = forwardRef(({ addBlog }, ref) => {
             type='text'
             value={title}
             name='title'
+            className='blogTitleInput'
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
@@ -42,6 +41,7 @@ const CreateBlog = forwardRef(({ addBlog }, ref) => {
             type='text'
             value={author}
             name='author'
+            className='blogAuthorInput'
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
@@ -51,10 +51,11 @@ const CreateBlog = forwardRef(({ addBlog }, ref) => {
             type='text'
             value={url}
             name='url'
+            className='blogUrlInput'
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button type='submit'>create</button>
+        <button type='submit' className='blogCreateButton'>create</button>
       </form>
     </div>
   )
