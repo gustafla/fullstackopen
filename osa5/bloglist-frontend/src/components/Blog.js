@@ -10,17 +10,29 @@ const BlogDetails = ({ blog, handleLike, handleRemove, user }) => {
   }
 
   return (
-    <div>
+    <div className='blogDetails'>
       <p>{blog.url}</p>
       <p>
         likes {blog.likes}
-        <button type='button' onClick={handleLikeButton}>like</button>
+        <button
+          type='button'
+          onClick={handleLikeButton}
+          className='blogLikeButton'
+        >
+          like
+        </button>
       </p>
       {blog.user ?
         <p>{blog.user.name ? blog.user.name : blog.user.username}</p>
         : null}
       {(!blog.user || (user && blog.user.username === user.username)) ?
-        <button type='button' onClick={handleRemove}>remove</button>
+        <button
+          type='button'
+          onClick={handleRemove}
+          className='blogRemoveButton'
+        >
+          remove
+        </button>
         : null}
     </div>
   )
