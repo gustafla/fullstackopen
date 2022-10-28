@@ -61,14 +61,14 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const contentField = { ...useField('text'), name: 'content' }
-  const authorField = { ...useField('text'), name: 'author' }
-  const infoField = { ...useField('text'), name: 'info' }
+  const [contentProps, resetContent] = useField('text')
+  const [authorProps, resetAuthor] = useField('text')
+  const [infoProps, resetInfo] = useField('text')
 
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
-    const [content, author, info] = [contentField, authorField, infoField].map(f => f.value)
+    const [content, author, info] = [contentProps, authorProps, infoProps].map(f => f.value)
     e.preventDefault()
     props.addNew({
       content,
@@ -81,23 +81,26 @@ const CreateNew = (props) => {
     navigate('/')
   }
 
+  const reset = () => [resetContent, resetAuthor, resetInfo].forEach(f => f())
+
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...contentField} />
+          <input {...contentProps} name='content' />
         </div>
         <div>
           author
-          <input {...authorField} />
+          <input {...authorProps} name='author' />
         </div>
         <div>
           url for more info
-          <input {...infoField} />
+          <input {...infoProps} name='info' />
         </div>
         <button>create</button>
+        <button type='button' onClick={reset}>reset</button>
       </form>
     </div>
   )
@@ -144,6 +147,7 @@ const App = () => {
   }
 
   const match = useMatch('/anecdotes/:id')
+  const anecdote = match ? anecdoteById(Number(match.params.id)) : undefined
 
   return (
     <div>
@@ -153,7 +157,11 @@ const App = () => {
 
       <Routes>
         <Route path='/' element={<Navigate replace to='/anecdotes' />} />
-        <Route path='/anecdotes/:id' element={<Anecdote anecdote={match ? anecdoteById(Number(match.params.id)) : null} />} />
+        <Route path='/anecdotes/:id' element={
+          anecdote
+            ? <Anecdote anecdote={anecdote} />
+            : <Navigate replace to='/anecdotes' />
+        } />
         <Route path='/anecdotes' element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path='/about' element={<About />} />
         <Route path='/create' element={<CreateNew addNew={addNew} setNotification={setNotification} />} />
