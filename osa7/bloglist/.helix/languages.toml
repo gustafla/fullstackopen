@@ -1,0 +1,14 @@
+[[language]]
+name = "javascript"
+auto-format = true
+formatter = { command = "npx", args = ["prettier", "--parser", "babel"] }
+
+[[language]]
+name = "json"
+auto-format = true
+formatter = { command = "npx", args = ["prettier", "--parser", "json"] }
+
+[[language]]
+name = "css"
+auto-format = true
+formatter = { command = "npx", args = ["prettier", "--parser", "css"] }

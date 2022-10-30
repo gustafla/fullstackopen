@@ -1,58 +1,47 @@
 module.exports = {
-  'env': {
-    'browser': true,
-    'commonjs': true,
-    'es2021': true,
-    'node': true,
-    'jest': true,
+  env: {
+    browser: true,
+    commonjs: true,
+    es2021: true,
+    node: true,
+    jest: true,
     'cypress/globals': true,
   },
-  'extends': [
+  extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'prettier',
   ],
-  'overrides': [
-  ],
-  'parserOptions': {
-    'ecmaVersion': 'latest',
-    'ecmaFeatures': {
-      'jsx': true,
+  overrides: [],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    ecmaFeatures: {
+      jsx: true,
     },
-    'sourceType': 'module',
+    sourceType: 'module',
   },
-  'plugins': [
-    'react', 'jest', 'cypress',
-  ],
-  'rules': {
-    'indent': [
-      'error',
-      2,
-    ],
-    'linebreak-style': [
-      'error',
-      'unix',
-    ],
-    'quotes': [
-      'error',
-      'single',
-    ],
-    'semi': [
-      'error',
-      'never',
-    ],
-    'eqeqeq': 'error',
+  plugins: ['react', 'jest', 'cypress'],
+  rules: {
+    indent: ['error', 2],
+    'linebreak-style': ['error', 'unix'],
+    quotes: ['error', 'single'],
+    semi: ['error', 'never'],
+    eqeqeq: 'error',
     'no-trailing-spaces': 'error',
     'object-curly-spacing': ['error', 'always'],
-    'arrow-spacing': ['error', { 'before': true, 'after': true }],
+    'arrow-spacing': ['error', { before: true, after: true }],
     'no-console': 0,
     'react-hooks/exhaustive-deps': 'warn',
-    'no-unused-vars': ['error', { 'varsIgnorePattern': '^_', 'argsIgnorePattern': '^_' }],
+    'no-unused-vars': [
+      'error',
+      { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
+    ],
     'comma-dangle': ['error', 'always-multiline'],
   },
-  'settings': {
-    'react': {
-      'version': 'detect',
+  settings: {
+    react: {
+      version: 'detect',
     },
   },
 }
