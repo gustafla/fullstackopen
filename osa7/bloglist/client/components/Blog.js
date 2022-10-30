@@ -1,12 +1,22 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { deleteBlog, likeBlog } from '../reducers/blogsReducer'
 
-const BlogDetails = ({ blog, handleLike, handleRemove, user }) => {
+const BlogDetails = ({ blog, user }) => {
+  const dispatch = useDispatch()
+
   const handleLikeButton = (event) => {
     // Stop like-click from propagating to the blog div
     // so it doesn't collapse itself
     event.stopPropagation()
-    handleLike()
+    dispatch(likeBlog(blog))
+  }
+
+  const handleRemove = () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      dispatch(deleteBlog(blog))
+    }
   }
 
   return (
@@ -40,12 +50,10 @@ const BlogDetails = ({ blog, handleLike, handleRemove, user }) => {
 
 BlogDetails.propTypes = {
   blog: PropTypes.object.isRequired,
-  handleLike: PropTypes.func.isRequired,
-  handleRemove: PropTypes.func.isRequired,
   user: PropTypes.object,
 }
 
-const Blog = ({ blog, handleLike, handleRemove, user }) => {
+const Blog = ({ blog, user }) => {
   const divStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -65,22 +73,13 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
       <p className='blogTitle'>
         <b>{blog.title}</b> by {blog.author}
       </p>
-      {showAll ? (
-        <BlogDetails
-          blog={blog}
-          handleLike={handleLike}
-          handleRemove={handleRemove}
-          user={user}
-        />
-      ) : null}
+      {showAll ? <BlogDetails blog={blog} user={user} /> : null}
     </div>
   )
 }
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  handleLike: PropTypes.func.isRequired,
-  handleRemove: PropTypes.func.isRequired,
   user: PropTypes.object,
 }
 

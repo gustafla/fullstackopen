@@ -1,30 +1,21 @@
 import React, { useState, forwardRef } from 'react'
-import PropTypes from 'prop-types'
-import { notifySuccess, notifyError } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogsReducer'
 
-const CreateBlog = forwardRef(({ addBlog }, ref) => {
+const CreateBlog = forwardRef((_, ref) => {
   const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  // Post blog to backend
   const handleSubmit = async (event) => {
     event.preventDefault()
-    try {
-      const blog = { title, author, url }
-      await addBlog(blog)
-      dispatch(notifySuccess(`${title} by ${author} added!`, 5))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      ref && ref.current.toggleVisibility()
-    } catch (exception) {
-      console.error('post failed', exception)
-      const message = exception.response.data.error
-      dispatch(notifyError(message ? message : 'Failed to submit', 5))
-    }
+    const blog = { title, author, url }
+    dispatch(createBlog(blog))
+    ref && ref.current.toggleVisibility()
+    setTitle('')
+    setAuthor('')
+    setUrl('')
   }
 
   return (
@@ -70,9 +61,5 @@ const CreateBlog = forwardRef(({ addBlog }, ref) => {
 })
 
 CreateBlog.displayName = 'CreateBlog'
-
-CreateBlog.propTypes = {
-  addBlog: PropTypes.func.isRequired,
-}
 
 export default CreateBlog

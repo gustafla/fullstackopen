@@ -18,21 +18,25 @@ const notificationSlice = createSlice({
     setSuccess: (state, action) => {
       state.success = action.payload
     },
+    clearSuccess: (state) => {
+      state.success.text = ''
+    },
     setError: (state, action) => {
       state.error = action.payload
+    },
+    clearError: (state) => {
+      state.error.text = ''
     },
   },
 })
 
-const { setSuccess, setError } = notificationSlice.actions
+const { setSuccess, clearSuccess, setError, clearError } =
+  notificationSlice.actions
 
 export const notifySuccess = (text, seconds) => {
   return async (dispatch, getState) => {
     clearTimeout(getState().notification.success.timeout)
-    const timeout = setTimeout(
-      () => dispatch(setSuccess(initialState.success)),
-      seconds * 1000,
-    )
+    const timeout = setTimeout(() => dispatch(clearSuccess()), seconds * 1000)
     dispatch(setSuccess({ text, timeout }))
   }
 }
@@ -40,10 +44,7 @@ export const notifySuccess = (text, seconds) => {
 export const notifyError = (text, seconds) => {
   return async (dispatch, getState) => {
     clearTimeout(getState().notification.error.timeout)
-    const timeout = setTimeout(
-      () => dispatch(setError(initialState.error)),
-      seconds * 1000,
-    )
+    const timeout = setTimeout(() => dispatch(clearError()), seconds * 1000)
     dispatch(setError({ text, timeout }))
   }
 }

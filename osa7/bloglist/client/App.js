@@ -18,7 +18,7 @@ const App = () => {
     setUser(null)
     window.localStorage.clear()
     dispatch(notifySuccess('Logged out', 5))
-  }, [])
+  }, [dispatch])
 
   // Helper that sets all login state
   const logUserIn = useCallback(
@@ -29,7 +29,7 @@ const App = () => {
       setUser(user)
       dispatch(notifySuccess('Logged in', 5))
     },
-    [logUserOut],
+    [logUserOut, dispatch],
   )
 
   // Load session from localstorage
