@@ -4,13 +4,19 @@ import '@testing-library/jest-dom/extend-expect'
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import CreateBlog from './CreateBlog'
+import { Provider } from 'react-redux'
+import store from '../store'
 
 let addBlog
 let container
 
 beforeEach(() => {
   addBlog = jest.fn()
-  container = render(<CreateBlog addBlog={addBlog} />).container
+  container = render(
+    <Provider store={store}>
+      <CreateBlog addBlog={addBlog} />
+    </Provider>,
+  ).container
 })
 
 test('calls addBlog when created', async () => {
