@@ -26,15 +26,17 @@ const nonExistingId = async () => {
 
 const blogsInDb = async () => {
   const blog = await Blog.find({})
-  return blog.map(blog => blog.toJSON())
+  return blog.map((blog) => blog.toJSON())
 }
 
 const usersInDb = async () => {
   const user = await User.find({})
-  return user.map(user => user.toJSON())
+  return user.map((user) => user.toJSON())
 }
 
 module.exports = {
-  initialBlogs, nonExistingId, blogsInDb, usersInDb,
+  initialBlogs,
+  nonExistingId,
+  blogsInDb,
+  usersInDb,
 }
-

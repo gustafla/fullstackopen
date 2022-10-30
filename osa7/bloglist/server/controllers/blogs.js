@@ -35,7 +35,9 @@ blogsRouter.delete('/:id', async (request, response) => {
   const result = await Blog.findById(id)
   if (result) {
     if (result.user && result.user.toString() !== user._id.toString()) {
-      return response.status(401).json({ error: 'token does not authorize for this resource' })
+      return response
+        .status(401)
+        .json({ error: 'token does not authorize for this resource' })
     }
     await result.remove()
     logger.info('deleted', result)
@@ -49,7 +51,9 @@ blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
 
   if (!body.likes) {
-    return response.status(400).json({ error: 'request must have a field called likes' })
+    return response
+      .status(400)
+      .json({ error: 'request must have a field called likes' })
   }
 
   const result = await Blog.findById(id)

@@ -10,7 +10,7 @@ const Blogs = ({ user }) => {
 
   // Load blog list from backend
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const blogs = await blogService.getAll()
       setBlogs(blogs)
     })()
@@ -20,7 +20,7 @@ const Blogs = ({ user }) => {
     const likedBlog = { ...blog, likes: blog.likes + 1 }
     try {
       const newBlog = await blogService.update(likedBlog)
-      setBlogs(blogs.map(b => b.id === newBlog.id ? newBlog : b))
+      setBlogs(blogs.map((b) => (b.id === newBlog.id ? newBlog : b)))
     } catch (exception) {
       console.error('like failed', exception)
     }
@@ -30,7 +30,7 @@ const Blogs = ({ user }) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       try {
         await blogService.remove(blog)
-        setBlogs(blogs.filter(b => b.id !== blog.id))
+        setBlogs(blogs.filter((b) => b.id !== blog.id))
       } catch (exception) {
         console.error('remove failed', exception)
       }
@@ -48,21 +48,20 @@ const Blogs = ({ user }) => {
   return (
     <div>
       <Togglable buttonLabel='new blog' ref={blogFormRef}>
-        <CreateBlog
-          addBlog={addBlog}
-          ref={blogFormRef}
-        />
+        <CreateBlog addBlog={addBlog} ref={blogFormRef} />
       </Togglable>
       <h2>blogs</h2>
-      {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleLike={() => handleLike(blog)}
-          handleRemove={() => handleRemove(blog)}
-          user={user}
-        />,
-      )}
+      {blogs
+        .sort((a, b) => b.likes - a.likes)
+        .map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleLike={() => handleLike(blog)}
+            handleRemove={() => handleRemove(blog)}
+            user={user}
+          />
+        ))}
     </div>
   )
 }

@@ -19,7 +19,9 @@ let container
 beforeEach(() => {
   handleLike = jest.fn()
   handleRemove = jest.fn()
-  container = render(<Blog blog={blog} handleLike={handleLike} handleRemove={handleRemove} />).container
+  container = render(
+    <Blog blog={blog} handleLike={handleLike} handleRemove={handleRemove} />,
+  ).container
 })
 
 test('renders title and author but not details', () => {

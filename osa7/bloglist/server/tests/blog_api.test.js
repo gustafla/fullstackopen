@@ -33,11 +33,11 @@ beforeEach(async () => {
 
   // Create blogs for the new user
   await Blog.deleteMany({})
-  const blogs = helper.initialBlogs.map(b => ({ ...b, user: user._id }))
+  const blogs = helper.initialBlogs.map((b) => ({ ...b, user: user._id }))
   const inserted = await Blog.insertMany(blogs)
 
   // Set blog ids to user document
-  user.blogs = inserted.map(b => b._id.toString())
+  user.blogs = inserted.map((b) => b._id.toString())
   user = await user.save()
 
   // Get a valid auth for user
@@ -54,30 +54,21 @@ describe('when there are initially some blogs saved', () => {
   })
 
   test('there are two blogs', async () => {
-    const response = await api
-      .get('/api/blogs')
-      .set(authorization)
-      .expect(200)
+    const response = await api.get('/api/blogs').set(authorization).expect(200)
 
     expect(response.body).toHaveLength(2)
   })
 
   test('a specific blog is within the returned blogs', async () => {
-    const response = await api
-      .get('/api/blogs')
-      .set(authorization)
-      .expect(200)
+    const response = await api.get('/api/blogs').set(authorization).expect(200)
 
-    const contents = response.body.map(blog => blog.title)
+    const contents = response.body.map((blog) => blog.title)
 
     expect(contents).toContain('Rust Blog')
   })
 
   test('blogs have id fields', async () => {
-    const response = await api
-      .get('/api/blogs')
-      .set(authorization)
-      .expect(200)
+    const response = await api.get('/api/blogs').set(authorization).expect(200)
 
     for (const blog of response.body) {
       expect(blog.id).toBeDefined()
@@ -93,7 +84,8 @@ describe('when there are initially some blogs saved', () => {
         likes: 42,
       }
 
-      const response = await api.post('/api/blogs')
+      const response = await api
+        .post('/api/blogs')
         .set(authorization)
         .send(newblog)
         .expect(201)
@@ -115,7 +107,8 @@ describe('when there are initially some blogs saved', () => {
         url: 'http://testserver.lan',
       }
 
-      const response = await api.post('/api/blogs')
+      const response = await api
+        .post('/api/blogs')
         .set(authorization)
         .send(newblog)
         .expect(201)
@@ -136,10 +129,7 @@ describe('when there are initially some blogs saved', () => {
         url: 'http://gamer.cool',
       }
 
-      await api.post('/api/blogs')
-        .set(authorization)
-        .send(newblog)
-        .expect(400)
+      await api.post('/api/blogs').set(authorization).send(newblog).expect(400)
 
       const blogsAfter = await helper.blogsInDb()
       expect(blogsAfter).toHaveLength(2)
@@ -151,20 +141,14 @@ describe('when there are initially some blogs saved', () => {
         author: 'Testaajat',
       }
 
-      await api.post('/api/blogs')
-        .set(authorization)
-        .send(newblog)
-        .expect(400)
+      await api.post('/api/blogs').set(authorization).send(newblog).expect(400)
 
       const blogsAfter = await helper.blogsInDb()
       expect(blogsAfter).toHaveLength(2)
     })
 
     test('post without fields results in bad request', async () => {
-      await api.post('/api/blogs')
-        .set(authorization)
-        .send({})
-        .expect(400)
+      await api.post('/api/blogs').set(authorization).send({}).expect(400)
 
       const blogsAfter = await helper.blogsInDb()
       expect(blogsAfter).toHaveLength(2)
@@ -177,9 +161,7 @@ describe('when there are initially some blogs saved', () => {
         author: 'Testaajat',
       }
 
-      const result = await api.post('/api/blogs')
-        .send(newblog)
-        .expect(401)
+      const result = await api.post('/api/blogs').send(newblog).expect(401)
 
       expect(result.body.error).toContain('authorization token required')
 
@@ -201,7 +183,7 @@ describe('when there are initially some blogs saved', () => {
       const blogsAfter = await helper.blogsInDb()
       expect(blogsAfter).toHaveLength(blogs.length - 1)
 
-      expect(blogsAfter.map(b => b.title)).not.toContain(deleteBlog.title)
+      expect(blogsAfter.map((b) => b.title)).not.toContain(deleteBlog.title)
 
       // Should respond 204 again
       await api

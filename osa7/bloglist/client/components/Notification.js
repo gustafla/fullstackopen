@@ -10,9 +10,7 @@ const Notification = ({ className, message, setMessage }) => {
 
   if (message === null) return
 
-  return (
-    <div className={`notification ${className}`}>{message}</div>
-  )
+  return <div className={`notification ${className}`}>{message}</div>
 }
 
 Notification.propTypes = {

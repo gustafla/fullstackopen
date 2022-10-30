@@ -22,10 +22,10 @@ const BlogDetails = ({ blog, handleLike, handleRemove, user }) => {
           like
         </button>
       </p>
-      {blog.user ?
+      {blog.user ? (
         <p>{blog.user.name ? blog.user.name : blog.user.username}</p>
-        : null}
-      {(!blog.user || (user && blog.user.username === user.username)) ?
+      ) : null}
+      {!blog.user || (user && blog.user.username === user.username) ? (
         <button
           type='button'
           onClick={handleRemove}
@@ -33,7 +33,7 @@ const BlogDetails = ({ blog, handleLike, handleRemove, user }) => {
         >
           remove
         </button>
-        : null}
+      ) : null}
     </div>
   )
 }
@@ -62,14 +62,17 @@ const Blog = ({ blog, handleLike, handleRemove, user }) => {
 
   return (
     <div style={divStyle} onClick={toggleShow} className='blog'>
-      <p className='blogTitle'><b>{blog.title}</b> by {blog.author}</p>
-      {showAll ?
+      <p className='blogTitle'>
+        <b>{blog.title}</b> by {blog.author}
+      </p>
+      {showAll ? (
         <BlogDetails
           blog={blog}
           handleLike={handleLike}
           handleRemove={handleRemove}
           user={user}
-        /> : null}
+        />
+      ) : null}
     </div>
   )
 }

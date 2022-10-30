@@ -17,7 +17,10 @@ describe('when there is initially one user at db', () => {
   })
 
   test('shown users have expected fields', async () => {
-    const response = await api.get('/api/users').expect(200).expect('Content-Type', /application\/json/)
+    const response = await api
+      .get('/api/users')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
 
     for (const user of response.body) {
       expect(user.username).toBeDefined()
@@ -48,10 +51,10 @@ describe('when there is initially one user at db', () => {
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
-      const usernames = usersAtEnd.map(u => u.username)
+      const usernames = usersAtEnd.map((u) => u.username)
       expect(usernames).toContain(newUser.username)
 
-      const names = usersAtEnd.map(u => u.name)
+      const names = usersAtEnd.map((u) => u.name)
       expect(names).toContain(newUser.name)
     })
 
@@ -72,7 +75,7 @@ describe('when there is initially one user at db', () => {
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
-      const usernames = usersAtEnd.map(u => u.username)
+      const usernames = usersAtEnd.map((u) => u.username)
       expect(usernames).toContain(newUser.username)
     })
 
@@ -89,12 +92,14 @@ describe('when there is initially one user at db', () => {
         .expect(400)
         .expect('Content-Type', /application\/json/)
 
-      expect(result.body.error).toContain('password must be at least 3 characters')
+      expect(result.body.error).toContain(
+        'password must be at least 3 characters',
+      )
 
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length)
 
-      const usernames = usersAtEnd.map(u => u.username)
+      const usernames = usersAtEnd.map((u) => u.username)
       expect(usernames).not.toContain(newUser.username)
     })
 
@@ -117,7 +122,7 @@ describe('when there is initially one user at db', () => {
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length)
 
-      const names = usersAtEnd.map(u => u.name)
+      const names = usersAtEnd.map((u) => u.name)
       expect(names).not.toContain(newUser.name)
     })
 
@@ -135,12 +140,14 @@ describe('when there is initially one user at db', () => {
         .expect(400)
         .expect('Content-Type', /application\/json/)
 
-      expect(result.body.error).toContain('username must be at least 3 characters')
+      expect(result.body.error).toContain(
+        'username must be at least 3 characters',
+      )
 
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length)
 
-      const usernames = usersAtEnd.map(u => u.username)
+      const usernames = usersAtEnd.map((u) => u.username)
       expect(usernames).not.toContain(newUser.username)
     })
 
@@ -159,12 +166,14 @@ describe('when there is initially one user at db', () => {
         .expect(400)
         .expect('Content-Type', /application\/json/)
 
-      expect(result.body.error).toContain('password must be at least 3 characters')
+      expect(result.body.error).toContain(
+        'password must be at least 3 characters',
+      )
 
       const usersAtEnd = await helper.usersInDb()
       expect(usersAtEnd).toHaveLength(usersAtStart.length)
 
-      const names = usersAtEnd.map(u => u.name)
+      const names = usersAtEnd.map((u) => u.name)
       expect(names).not.toContain(newUser.name)
     })
 

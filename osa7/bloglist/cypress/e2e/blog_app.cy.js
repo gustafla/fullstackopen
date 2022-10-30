@@ -1,5 +1,5 @@
-describe('Blog app', function() {
-  beforeEach(function() {
+describe('Blog app', function () {
+  beforeEach(function () {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
 
     const user1 = {
@@ -19,47 +19,53 @@ describe('Blog app', function() {
     cy.visit('http://localhost:3000')
   })
 
-  it('login page is shown', function() {
+  it('login page is shown', function () {
     cy.contains('Login')
     cy.contains('username')
     cy.contains('password')
   })
 
-  describe('Login', function() {
-    it('fails with wrong username', function() {
+  describe('Login', function () {
+    it('fails with wrong username', function () {
       cy.get('#username').type('gustafa')
       cy.get('#password').type('password')
       cy.get('#loginButton').click()
 
-      cy.contains('invalid username or password')
-        .should('have.css', 'color', 'rgb(255, 0, 0)')
+      cy.contains('invalid username or password').should(
+        'have.css',
+        'color',
+        'rgb(255, 0, 0)',
+      )
     })
 
-    it('fails with wrong password', function() {
+    it('fails with wrong password', function () {
       cy.get('#username').type('gustafla')
       cy.get('#password').type('passwodr')
       cy.get('#loginButton').click()
 
-      cy.contains('invalid username or password')
-        .should('have.css', 'color', 'rgb(255, 0, 0)')
+      cy.contains('invalid username or password').should(
+        'have.css',
+        'color',
+        'rgb(255, 0, 0)',
+      )
     })
 
-    it('succeeds with correct creds', function() {
+    it('succeeds with correct creds', function () {
       cy.get('#username').type('gustafla')
       cy.get('#password').type('password')
       cy.get('#loginButton').click()
 
       cy.contains('Lauri Gustafsson')
-      cy.get('.notification')
-        .should('have.css', 'color', 'rgb(0, 128, 0)')
+      cy.get('.notification').should('have.css', 'color', 'rgb(0, 128, 0)')
     })
   })
 
-  describe('when logged in', function() {
-    beforeEach(function() {
+  describe('when logged in', function () {
+    beforeEach(function () {
       cy.request('POST', 'http://localhost:3001/api/login', {
-        username: 'gustafla', password: 'password',
-      }).then(function(response) {
+        username: 'gustafla',
+        password: 'password',
+      }).then(function (response) {
         localStorage.setItem('loggedUser', JSON.stringify(response.body))
         cy.visit('http://localhost:3000')
       })
@@ -79,7 +85,7 @@ describe('Blog app', function() {
       cy.get('.blogUrlInput').should('not.be.visible').and('be.empty')
     }
 
-    it('a blog can be created and seen immediately as well as permanently', function() {
+    it('a blog can be created and seen immediately as well as permanently', function () {
       createBlog('Hello World', 'Testers', 'http://localhost:3000')
 
       cy.contains('p', 'Hello World')
@@ -90,7 +96,7 @@ describe('Blog app', function() {
       cy.contains('Tester')
     })
 
-    it('a created blog can be liked and the like is saved', function() {
+    it('a created blog can be liked and the like is saved', function () {
       createBlog('Hello World', 'Testers', 'http://localhost:3000')
 
       cy.get('.blog').click()
@@ -102,7 +108,7 @@ describe('Blog app', function() {
       cy.contains('likes 1')
     })
 
-    it('a created blog can be deleted permanently', function() {
+    it('a created blog can be deleted permanently', function () {
       createBlog('Hello World', 'Testers', 'http://localhost:3000')
 
       cy.visit('http://localhost:3000')
@@ -115,12 +121,13 @@ describe('Blog app', function() {
       cy.contains('Hello World').should('not.exist')
     })
 
-    it('a created blog cannot be deleted by a different user', function() {
+    it('a created blog cannot be deleted by a different user', function () {
       createBlog('Hello World', 'Testers', 'http://localhost:3000')
 
       cy.request('POST', 'http://localhost:3001/api/login', {
-        username: 'luukkainen', password: 'matti',
-      }).then(function(response) {
+        username: 'luukkainen',
+        password: 'matti',
+      }).then(function (response) {
         localStorage.setItem('loggedUser', JSON.stringify(response.body))
       })
 
@@ -129,43 +136,49 @@ describe('Blog app', function() {
       cy.get('.blogRemoveButton').should('not.exist')
     })
 
-    it('blogs are ordered by likes', function() {
+    it('blogs are ordered by likes', function () {
       createBlog('Hello World 1', 'Testers', 'http://localhost:3001')
       createBlog('Hello World 2', 'Testers', 'http://localhost:3002')
       createBlog('Hello World 3', 'Testers', 'http://localhost:3003')
       createBlog('Hello World 4', 'Testers', 'http://localhost:3004')
 
-      cy.get('.blog').each(function(e) {
+      cy.get('.blog').each(function (e) {
         e.click()
       })
 
       // second twice
-      cy.contains('.blogTitle', 'Hello World 2').parent().within(function() {
-        cy.get('.blogLikeButton').click()
-        cy.contains('likes 1')
-        cy.get('.blogLikeButton').click()
-        cy.contains('likes 2')
-      })
+      cy.contains('.blogTitle', 'Hello World 2')
+        .parent()
+        .within(function () {
+          cy.get('.blogLikeButton').click()
+          cy.contains('likes 1')
+          cy.get('.blogLikeButton').click()
+          cy.contains('likes 2')
+        })
 
       // third 5 times
-      cy.contains('.blogTitle', 'Hello World 3').parent().within(function() {
-        cy.get('.blogLikeButton').click()
-        cy.contains('likes 1')
-        cy.get('.blogLikeButton').click()
-        cy.contains('likes 2')
-        cy.get('.blogLikeButton').click()
-        cy.contains('likes 3')
-        cy.get('.blogLikeButton').click()
-        cy.contains('likes 4')
-        cy.get('.blogLikeButton').click()
-        cy.contains('likes 5')
-      })
+      cy.contains('.blogTitle', 'Hello World 3')
+        .parent()
+        .within(function () {
+          cy.get('.blogLikeButton').click()
+          cy.contains('likes 1')
+          cy.get('.blogLikeButton').click()
+          cy.contains('likes 2')
+          cy.get('.blogLikeButton').click()
+          cy.contains('likes 3')
+          cy.get('.blogLikeButton').click()
+          cy.contains('likes 4')
+          cy.get('.blogLikeButton').click()
+          cy.contains('likes 5')
+        })
 
       // fourth 1 times
-      cy.contains('.blogTitle', 'Hello World 4').parent().within(function() {
-        cy.get('.blogLikeButton').click()
-        cy.contains('likes 1')
-      })
+      cy.contains('.blogTitle', 'Hello World 4')
+        .parent()
+        .within(function () {
+          cy.get('.blogLikeButton').click()
+          cy.contains('likes 1')
+        })
 
       cy.get('.blog').eq(0).should('include.text', 'likes 5')
       cy.get('.blog').eq(1).should('include.text', 'likes 2')
@@ -174,7 +187,7 @@ describe('Blog app', function() {
 
       cy.visit('http://localhost:3000')
 
-      cy.get('.blog').each(function(e) {
+      cy.get('.blog').each(function (e) {
         e.click()
       })
 
