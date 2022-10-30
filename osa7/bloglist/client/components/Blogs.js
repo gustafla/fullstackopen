@@ -4,8 +4,11 @@ import Togglable from './Togglable'
 import PropTypes from 'prop-types'
 import CreateBlog from './CreateBlog'
 import Blog from './Blog'
+import { notifySuccess, notifyError } from '../reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
 const Blogs = ({ user }) => {
+  const dispatch = useDispatch()
   const [blogs, setBlogs] = useState([])
 
   // Load blog list from backend
@@ -21,8 +24,11 @@ const Blogs = ({ user }) => {
     try {
       const newBlog = await blogService.update(likedBlog)
       setBlogs(blogs.map((b) => (b.id === newBlog.id ? newBlog : b)))
+      dispatch(notifySuccess(`Liked ${blog.title}!`, 5))
     } catch (exception) {
       console.error('like failed', exception)
+      const message = exception.response.data.error
+      dispatch(notifyError(message ? message : 'Failed to like', 5))
     }
   }
 
@@ -31,8 +37,11 @@ const Blogs = ({ user }) => {
       try {
         await blogService.remove(blog)
         setBlogs(blogs.filter((b) => b.id !== blog.id))
+        dispatch(notifySuccess(`Removed ${blog.title}!`, 5))
       } catch (exception) {
         console.error('remove failed', exception)
+        const message = exception.response.data.error
+        dispatch(notifyError(message ? message : 'Failed to remove', 5))
       }
     }
   }

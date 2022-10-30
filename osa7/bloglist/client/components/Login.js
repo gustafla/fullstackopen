@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 import loginService from '../services/login'
 import PropTypes from 'prop-types'
+import { notifyError } from '../reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
 const Login = ({ logUserIn }) => {
+  const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -17,6 +20,8 @@ const Login = ({ logUserIn }) => {
       setPassword('')
     } catch (exception) {
       console.error('login failed', exception)
+      const message = exception.response.data.error
+      dispatch(notifyError(message ? message : 'Login service unavailable', 5))
     }
   }
 

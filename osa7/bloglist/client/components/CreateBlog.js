@@ -1,7 +1,10 @@
 import React, { useState, forwardRef } from 'react'
 import PropTypes from 'prop-types'
+import { notifySuccess, notifyError } from '../reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
 const CreateBlog = forwardRef(({ addBlog }, ref) => {
+  const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -12,12 +15,15 @@ const CreateBlog = forwardRef(({ addBlog }, ref) => {
     try {
       const blog = { title, author, url }
       await addBlog(blog)
+      dispatch(notifySuccess(`${title} by ${author} added!`, 5))
       setTitle('')
       setAuthor('')
       setUrl('')
       ref && ref.current.toggleVisibility()
     } catch (exception) {
       console.error('post failed', exception)
+      const message = exception.response.data.error
+      dispatch(notifyError(message ? message : 'Failed to submit', 5))
     }
   }
 
