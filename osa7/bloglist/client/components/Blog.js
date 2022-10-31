@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogsReducer'
 
-const BlogDetails = ({ blog, user }) => {
+const BlogDetails = ({ blog }) => {
   const dispatch = useDispatch()
+  const sessionUsername = useSelector(({ session }) => session.username)
 
   const handleLikeButton = (event) => {
     // Stop like-click from propagating to the blog div
@@ -32,28 +33,36 @@ const BlogDetails = ({ blog, user }) => {
           like
         </button>
       </p>
-      {blog.user ? (
-        <p>{blog.user.name ? blog.user.name : blog.user.username}</p>
-      ) : null}
-      {!blog.user || (user && blog.user.username === user.username) ? (
-        <button
-          type='button'
-          onClick={handleRemove}
-          className='blogRemoveButton'
-        >
-          remove
-        </button>
-      ) : null}
+
+      {
+        /* Render blog's poster's name if available or username if available */
+        blog.user ? (
+          <p>{blog.user.name ? blog.user.name : blog.user.username}</p>
+        ) : null
+      }
+
+      {
+        /* Render remove-button only for blogs which don't have username,
+         or which have been posted by session owner */
+        !blog.user || blog.user.username === sessionUsername ? (
+          <button
+            type='button'
+            onClick={handleRemove}
+            className='blogRemoveButton'
+          >
+            remove
+          </button>
+        ) : null
+      }
     </div>
   )
 }
 
 BlogDetails.propTypes = {
   blog: PropTypes.object.isRequired,
-  user: PropTypes.object,
 }
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   const divStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -73,14 +82,13 @@ const Blog = ({ blog, user }) => {
       <p className='blogTitle'>
         <b>{blog.title}</b> by {blog.author}
       </p>
-      {showAll ? <BlogDetails blog={blog} user={user} /> : null}
+      {showAll ? <BlogDetails blog={blog} /> : null}
     </div>
   )
 }
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  user: PropTypes.object,
 }
 
 export default Blog

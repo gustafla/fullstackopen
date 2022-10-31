@@ -6,7 +6,7 @@ const config = require('./config')
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
   logger.info('Path:  ', request.path)
-  if (!Object.keys(request.body).includes('password')) {
+  if (!request.body.password) {
     logger.info('Body:  ', request.body)
   }
   logger.info('---')

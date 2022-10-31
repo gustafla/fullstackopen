@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
 import { notifySuccess, notifyError } from './notificationReducer'
+import { logOut } from './sessionReducer'
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -23,60 +24,66 @@ const blogSlice = createSlice({
 
 const { addBlog, updateBlog, removeBlog, setBlogs } = blogSlice.actions
 
+const handleException = (dispatch, exception, message) => {
+  const error = exception.response.data.error
+  if (error) {
+    if (error.includes('expired')) {
+      dispatch(logOut())
+    }
+    dispatch(notifyError(`${message}: ${error}`, 5))
+  } else {
+    dispatch(notifyError(message, 5))
+  }
+}
+
 export const initializeBlogs = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().session.token
     try {
-      const blogs = await blogService.getAll()
+      const blogs = await blogService.getAll(token)
       dispatch(setBlogs(blogs))
     } catch (exception) {
-      const message = exception.response.data.error
-      dispatch(
-        notifyError('Failed to fetch blogs' + message ? `: ${message}` : '', 5),
-      )
+      handleException(dispatch, exception, 'Failed to fetch blogs')
     }
   }
 }
 
 export const createBlog = (blog) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().session.token
     try {
-      const newBlog = await blogService.create(blog)
+      const newBlog = await blogService.create(token, blog)
       dispatch(addBlog(newBlog))
       dispatch(notifySuccess(`${newBlog.title} by ${newBlog.author} added!`, 5))
     } catch (exception) {
-      const message = exception.response.data.error
-      dispatch(
-        notifyError('Failed to submit' + message ? `: ${message}` : '', 5),
-      )
+      handleException(dispatch, exception, 'Failed to submit blog')
     }
   }
 }
 
 export const likeBlog = (blog) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().session.token
     const likedBlog = { ...blog, likes: blog.likes + 1 }
     try {
-      const newBlog = await blogService.update(likedBlog)
+      const newBlog = await blogService.update(token, likedBlog)
       dispatch(updateBlog(newBlog))
       dispatch(notifySuccess(`Liked ${newBlog.title}!`, 5))
     } catch (exception) {
-      const message = exception.response.data.error
-      dispatch(notifyError('Failed to like' + message ? `: ${message}` : '', 5))
+      handleException(dispatch, exception, 'Failed to like blog')
     }
   }
 }
 
 export const deleteBlog = (blog) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().session.token
     try {
-      await blogService.remove(blog)
+      await blogService.remove(token, blog)
       dispatch(removeBlog(blog))
       dispatch(notifySuccess(`Removed ${blog.title}!`, 5))
     } catch (exception) {
-      const message = exception.response.data.error
-      dispatch(
-        notifyError('Failed to remove' + message ? `: ${message}` : '', 5),
-      )
+      handleException(dispatch, exception, 'Failed to delete blog')
     }
   }
 }

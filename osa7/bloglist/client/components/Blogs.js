@@ -1,19 +1,18 @@
 import React, { useEffect, useRef } from 'react'
 import Togglable from './Togglable'
-import PropTypes from 'prop-types'
 import CreateBlog from './CreateBlog'
 import Blog from './Blog'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from '../reducers/blogsReducer'
 
-const Blogs = ({ user }) => {
+const Blogs = () => {
   const dispatch = useDispatch()
   const blogs = useSelector(({ blogs }) => blogs)
 
   // Load blog list from backend
   useEffect(() => {
     dispatch(initializeBlogs())
-  }, [dispatch, user])
+  }, [dispatch])
 
   // Mediate access to Togglable's toggleVisibility from CreateBlog
   const blogFormRef = useRef()
@@ -27,14 +26,10 @@ const Blogs = ({ user }) => {
       {[...blogs]
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog key={blog.id} blog={blog} user={user} />
+          <Blog key={blog.id} blog={blog} />
         ))}
     </div>
   )
-}
-
-Blogs.propTypes = {
-  user: PropTypes.object.isRequired,
 }
 
 export default Blogs

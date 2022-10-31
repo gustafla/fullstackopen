@@ -1,28 +1,17 @@
 import React, { useState } from 'react'
-import loginService from '../services/login'
-import PropTypes from 'prop-types'
-import { notifyError } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
+import { logIn } from '../reducers/sessionReducer'
 
-const Login = ({ logUserIn }) => {
+const Login = () => {
   const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  // Post login to backend
   const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log('logging in', username, password)
-    try {
-      const user = await loginService.login({ username, password })
-      logUserIn(user)
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      console.error('login failed', exception)
-      const message = exception.response.data.error
-      dispatch(notifyError(message ? message : 'Login service unavailable', 5))
-    }
+    dispatch(logIn(username, password))
+    setUsername('')
+    setPassword('')
   }
 
   return (
@@ -53,10 +42,6 @@ const Login = ({ logUserIn }) => {
       </form>
     </div>
   )
-}
-
-Login.propTypes = {
-  logUserIn: PropTypes.func.isRequired,
 }
 
 export default Login
