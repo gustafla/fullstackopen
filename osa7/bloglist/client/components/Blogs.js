@@ -1,18 +1,11 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef } from 'react'
 import Togglable from './Togglable'
 import CreateBlog from './CreateBlog'
 import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs } from '../reducers/blogsReducer'
+import { useSelector } from 'react-redux'
 
 const Blogs = () => {
-  const dispatch = useDispatch()
   const blogs = useSelector(({ blogs }) => blogs)
-
-  // Fetch blogs
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [dispatch])
 
   // Mediate access to Togglable's toggleVisibility from CreateBlog
   const blogFormRef = useRef()

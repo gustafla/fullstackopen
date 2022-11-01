@@ -1,19 +1,43 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs, deleteBlog, likeBlog } from '../reducers/blogsReducer'
+import { deleteBlog, likeBlog, commentBlog } from '../reducers/blogsReducer'
 import { useNavigate } from 'react-router-dom'
+
+const BlogComments = ({ blog }) => {
+  const dispatch = useDispatch()
+
+  const addComment = (event) => {
+    event.preventDefault()
+    dispatch(commentBlog(blog, event.target.comment.value))
+    event.target.comment.value = ''
+  }
+
+  return (
+    <div>
+      <h3>Comments</h3>
+      <form onSubmit={addComment}>
+        <input type='text' name='comment' />
+        <button type='submit'>add comment</button>
+      </form>
+      <ul>
+        {blog.comments.map((c) => (
+          <li key={c.id}>{c.comment}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+BlogComments.propTypes = {
+  blog: PropTypes.object.isRequired,
+}
 
 const Blog = ({ blogId }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const blog = useSelector(({ blogs }) => blogs.find((b) => b.id === blogId))
   const sessionUsername = useSelector(({ session }) => session.user.username)
-
-  // Fetch blogs
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [dispatch])
 
   if (!blog) {
     return null
@@ -58,6 +82,8 @@ const Blog = ({ blogId }) => {
           </button>
         ) : null
       }
+
+      <BlogComments blog={blog} />
     </div>
   )
 }

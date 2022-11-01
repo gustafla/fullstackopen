@@ -9,6 +9,8 @@ import PropTypes from 'prop-types'
 import { Routes, Route, Navigate, Link, useMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOut, loadSession } from './reducers/sessionReducer'
+import { initializeBlogs } from './reducers/blogsReducer'
+import { initializeUsers } from './reducers/usersReducer'
 
 const Notifications = () => {
   return (
@@ -68,8 +70,16 @@ const App = () => {
     dispatch(loadSession())
   }, [dispatch])
 
-  // Early return when no session exists
+  // Initialize content when session becomes defined
   const user = session?.user
+  useEffect(() => {
+    if (user) {
+      dispatch(initializeBlogs())
+      dispatch(initializeUsers())
+    }
+  }, [dispatch, user])
+
+  // Early return when no session exists
   if (!user) {
     return (
       <div>

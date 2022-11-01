@@ -17,6 +17,7 @@ blogsRouter.post('/', async (request, response) => {
     url: body.url,
     likes: body.likes || 0,
     user: user._id,
+    comments: [],
   })
 
   const result = await blog.save()
@@ -59,6 +60,26 @@ blogsRouter.put('/:id', async (request, response) => {
   const result = await Blog.findById(id)
   if (result) {
     result.likes = body.likes
+
+    const updated = await result.save()
+    const withUser = await updated.populate('user', { username: 1, name: 1 })
+    return response.json(withUser)
+  }
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const id = request.params.id
+  const body = request.body
+
+  if (!body.comment) {
+    return response
+      .status(400)
+      .json({ error: 'request must have a fields called comment' })
+  }
+
+  const result = await Blog.findById(id)
+  if (result) {
+    result.comments.push(body)
 
     const updated = await result.save()
     const withUser = await updated.populate('user', { username: 1, name: 1 })

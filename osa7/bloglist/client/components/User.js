@@ -1,17 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
-import { initializeUsers } from '../reducers/usersReducer'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 const User = ({ userId }) => {
-  const dispatch = useDispatch()
   const user = useSelector(({ users }) => users?.find((u) => u.id === userId))
-
-  // Fetch users
-  useEffect(() => {
-    dispatch(initializeUsers())
-  }, [dispatch])
 
   if (!user) {
     return null
