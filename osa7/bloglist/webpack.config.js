@@ -33,6 +33,7 @@ const config = {
     proxy: {
       '/api': 'http://localhost:3001',
     },
+    historyApiFallback: true,
   },
   devtool: 'source-map',
   module: {

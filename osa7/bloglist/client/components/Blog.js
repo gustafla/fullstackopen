@@ -5,7 +5,7 @@ import { deleteBlog, likeBlog } from '../reducers/blogsReducer'
 
 const BlogDetails = ({ blog }) => {
   const dispatch = useDispatch()
-  const sessionUsername = useSelector(({ session }) => session.username)
+  const sessionUsername = useSelector(({ session }) => session.user.username)
 
   const handleLikeButton = (event) => {
     // Stop like-click from propagating to the blog div

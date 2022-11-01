@@ -23,8 +23,8 @@ const sessionItem = 'loggedUser'
 
 export const logOut = () => {
   return async (dispatch) => {
-    dispatch(clearSession())
     window.localStorage.clear()
+    dispatch(clearSession())
     dispatch(notifySuccess('Logged out', 5))
   }
 }
