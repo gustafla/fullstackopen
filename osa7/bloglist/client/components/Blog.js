@@ -1,49 +1,53 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteBlog, likeBlog } from '../reducers/blogsReducer'
+import { initializeBlogs, deleteBlog, likeBlog } from '../reducers/blogsReducer'
+import { useNavigate } from 'react-router-dom'
 
-const BlogDetails = ({ blog }) => {
+const Blog = ({ blogId }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const blog = useSelector(({ blogs }) => blogs.find((b) => b.id === blogId))
   const sessionUsername = useSelector(({ session }) => session.user.username)
 
-  const handleLikeButton = (event) => {
-    // Stop like-click from propagating to the blog div
-    // so it doesn't collapse itself
-    event.stopPropagation()
+  // Fetch blogs
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [dispatch])
+
+  if (!blog) {
+    return null
+  }
+
+  const handleLikeButton = () => {
     dispatch(likeBlog(blog))
   }
 
   const handleRemove = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       dispatch(deleteBlog(blog))
+      navigate('/blogs')
     }
   }
 
   return (
-    <div className='blogDetails'>
-      <p>{blog.url}</p>
-      <p>
-        likes {blog.likes}
-        <button
-          type='button'
-          onClick={handleLikeButton}
-          className='blogLikeButton'
-        >
-          like
-        </button>
-      </p>
+    <div>
+      <h2>{blog.title}</h2>
+
+      <a href={blog.url}>{blog.url}</a>
+
+      <div>
+        {blog.likes} likes
+        <button onClick={handleLikeButton}>like</button>
+      </div>
+
+      {blog.user ? (
+        <p>Added by {blog.user.name ? blog.user.name : blog.user.username}</p>
+      ) : null}
 
       {
-        /* Render blog's poster's name if available or username if available */
-        blog.user ? (
-          <p>{blog.user.name ? blog.user.name : blog.user.username}</p>
-        ) : null
-      }
-
-      {
-        /* Render remove-button only for blogs which don't have username,
-         or which have been posted by session owner */
+        // Render remove-button only for blogs which don't have username,
+        // or which have been posted by session owner
         !blog.user || blog.user.username === sessionUsername ? (
           <button
             type='button'
@@ -58,37 +62,8 @@ const BlogDetails = ({ blog }) => {
   )
 }
 
-BlogDetails.propTypes = {
-  blog: PropTypes.object.isRequired,
-}
-
-const Blog = ({ blog }) => {
-  const divStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
-
-  const [showAll, setShowAll] = useState(false)
-
-  const toggleShow = () => {
-    setShowAll(!showAll)
-  }
-
-  return (
-    <div style={divStyle} onClick={toggleShow} className='blog'>
-      <p className='blogTitle'>
-        <b>{blog.title}</b> by {blog.author}
-      </p>
-      {showAll ? <BlogDetails blog={blog} /> : null}
-    </div>
-  )
-}
-
 Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
+  blogId: PropTypes.string,
 }
 
 export default Blog

@@ -7,6 +7,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'main.js',
+    publicPath: '/',
   },
   plugins: [
     new MiniCssExtractPlugin(),
@@ -34,6 +35,7 @@ const config = {
       '/api': 'http://localhost:3001',
     },
     historyApiFallback: true,
+    watchOptions: { aggregateTimeout: 800 },
   },
   devtool: 'source-map',
   module: {

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
-import { notifySuccess, notifyError } from './notificationReducer'
-import { logOut } from './sessionReducer'
+import { notifySuccess } from './notificationReducer'
+import handleException from './handleException'
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -23,18 +23,6 @@ const blogSlice = createSlice({
 })
 
 const { addBlog, updateBlog, removeBlog, setBlogs } = blogSlice.actions
-
-const handleException = (dispatch, exception, message) => {
-  const error = exception.response.data.error
-  if (error) {
-    if (error.includes('expired')) {
-      dispatch(logOut())
-    }
-    dispatch(notifyError(`${message}: ${error}`, 5))
-  } else {
-    dispatch(notifyError(message, 5))
-  }
-}
 
 export const initializeBlogs = () => {
   return async (dispatch, getState) => {

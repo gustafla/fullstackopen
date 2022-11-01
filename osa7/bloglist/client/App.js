@@ -1,47 +1,97 @@
 import React, { useEffect } from 'react'
 import Login from './components/Login'
 import Blogs from './components/Blogs'
+import Blog from './components/Blog'
 import Users from './components/Users'
+import User from './components/User'
 import Notification from './components/Notification'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { Routes, Route, Navigate, Link, useMatch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOut, loadSession } from './reducers/sessionReducer'
+
+const Notifications = () => {
+  return (
+    <div>
+      <Notification className={'success'} />
+      <Notification className={'error'} />
+    </div>
+  )
+}
+
+const Menu = ({ user }) => {
+  const dispatch = useDispatch()
+
+  const logUserOut = () => {
+    dispatch(logOut())
+  }
+
+  const barStyle = {
+    background: 'lightgrey',
+    marginBottom: '30px',
+  }
+
+  const itemStyle = {
+    margin: '4px',
+    display: 'inline',
+  }
+
+  return (
+    <div style={barStyle}>
+      <Link to='/blogs' style={itemStyle}>
+        blogs
+      </Link>
+      <Link to='/users' style={itemStyle}>
+        users
+      </Link>
+      <p style={itemStyle}>{user.name ? user.name : user.username} logged in</p>
+      <button type='button' onClick={logUserOut} style={itemStyle}>
+        logout
+      </button>
+    </div>
+  )
+}
+
+Menu.propTypes = {
+  user: PropTypes.object,
+}
 
 const App = () => {
   const dispatch = useDispatch()
   const session = useSelector(({ session }) => session)
 
-  const logUserOut = () => {
-    dispatch(logOut())
-  }
+  // Match parameters in route
+  const match = useMatch('/:res/:id')
 
   // Load session from localstorage
   useEffect(() => {
     dispatch(loadSession())
   }, [dispatch])
 
-  const user = session.user
+  // Early return when no session exists
+  const user = session?.user
+  if (!user) {
+    return (
+      <div>
+        <Notifications />
+        <Login />
+      </div>
+    )
+  }
+
+  /* ---------------------------v- Logged in -v------------------------------ */
 
   return (
     <div>
-      <Notification className={'success'} />
-      <Notification className={'error'} />
-
-      {user ? (
-        <div>
-          {user.name ? user.name : user.username} logged in
-          <button type='button' onClick={logUserOut}>
-            logout
-          </button>
-          <Routes>
-            <Route path='/' element={<Navigate replace to='/blogs' />} />
-            <Route path='/blogs' element={<Blogs />} />
-            <Route path='/users' element={<Users />} />
-          </Routes>
-        </div>
-      ) : (
-        <Login />
-      )}
+      <Menu user={user} />
+      <Notifications />
+      <Routes>
+        <Route path='/' element={<Navigate replace to='/blogs' />} />
+        <Route path='/blogs/:id' element={<Blog blogId={match?.params.id} />} />
+        <Route path='/blogs' element={<Blogs />} />
+        <Route path='/users/:id' element={<User userId={match?.params.id} />} />
+        <Route path='/users' element={<Users />} />
+      </Routes>
     </div>
   )
 }
