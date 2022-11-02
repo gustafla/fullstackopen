@@ -82,7 +82,7 @@ const App = () => {
   // Early return when no session exists
   if (!user) {
     return (
-      <div>
+      <div className='container'>
         <Notifications />
         <Login />
       </div>
@@ -92,7 +92,7 @@ const App = () => {
   /* ---------------------------v- Logged in -v------------------------------ */
 
   return (
-    <div>
+    <div className='container'>
       <Menu user={user} />
       <Notifications />
       <Routes>

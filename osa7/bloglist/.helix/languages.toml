@@ -12,3 +12,8 @@ formatter = { command = "npx", args = ["prettier", "--parser", "json"] }
 name = "css"
 auto-format = true
 formatter = { command = "npx", args = ["prettier", "--parser", "css"] }
+
+[[language]]
+name = "html"
+auto-format = true
+formatter = { command = "npx", args = ["prettier", "--parser", "html"] }

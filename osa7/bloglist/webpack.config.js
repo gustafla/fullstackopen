@@ -14,17 +14,7 @@ const config = {
     new HtmlWebpackPlugin({
       title: 'Bloglist',
       xhtml: true,
-      templateContent: `
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta charset="utf-8" />
-          </head>
-          <body>
-            <div id="root" />
-          </body>
-        </html>
-      `,
+      template: 'index.html',
     }),
   ],
   devServer: {
@@ -35,7 +25,6 @@ const config = {
       '/api': 'http://localhost:3001',
     },
     historyApiFallback: true,
-    watchOptions: { aggregateTimeout: 800 },
   },
   devtool: 'source-map',
   module: {
