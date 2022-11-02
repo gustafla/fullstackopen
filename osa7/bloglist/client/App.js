@@ -11,12 +11,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logOut, loadSession } from './reducers/sessionReducer'
 import { initializeBlogs } from './reducers/blogsReducer'
 import { initializeUsers } from './reducers/usersReducer'
+import { Button } from 'react-bootstrap'
 
 const Notifications = () => {
   return (
     <div>
-      <Notification className={'success'} />
-      <Notification className={'error'} />
+      <Notification variant={'success'} />
+      <Notification variant={'error'} />
     </div>
   )
 }
@@ -29,7 +30,6 @@ const Menu = ({ user }) => {
   }
 
   const barStyle = {
-    background: 'lightgrey',
     marginBottom: '30px',
   }
 
@@ -47,9 +47,9 @@ const Menu = ({ user }) => {
         users
       </Link>
       <p style={itemStyle}>{user.name ? user.name : user.username} logged in</p>
-      <button type='button' onClick={logUserOut} style={itemStyle}>
+      <Button size='sm' variant='secondary' onClick={logUserOut}>
         logout
-      </button>
+      </Button>
     </div>
   )
 }

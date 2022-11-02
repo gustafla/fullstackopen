@@ -1,17 +1,43 @@
-.notification {
-  color: orange;
-  background: lightgrey;
-  font-size: 20px;
-  border-style: solid;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
+td {
+  padding: 6px;
 }
 
-.error {
-  color: red;
+th {
+  padding: 4px;
 }
 
-.success {
-  color: green;
+.likes {
+  display: inline;
+  font-size: 12pt;
+  margin: 25px;
+}
+
+.likesCount {
+  display: inline;
+  margin: 6px;
+}
+
+.blogAddedBy {
+  margin: 25px 0 25px 0;
+}
+
+.blogUrl {
+  font-size: 14pt;
+  margin: 25px 0 25px 0;
+}
+
+.card {
+  margin: 25px 0 25px 0;
+}
+
+.toast {
+  margin: 25px 0 25px 0;
+}
+
+.createBlog {
+  margin: 25px 0 25px 0;
+}
+
+.comments {
+  margin: 25px 0 25px 0;
 }

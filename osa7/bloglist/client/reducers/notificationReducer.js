@@ -30,8 +30,8 @@ const notificationSlice = createSlice({
   },
 })
 
-const { setSuccess, clearSuccess, setError, clearError } =
-  notificationSlice.actions
+const { setSuccess, setError } = notificationSlice.actions
+export const { clearSuccess, clearError } = notificationSlice.actions
 
 export const notifySuccess = (text, seconds) => {
   return async (dispatch, getState) => {

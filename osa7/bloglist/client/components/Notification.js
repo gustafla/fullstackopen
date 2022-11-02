@@ -1,20 +1,33 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
+import { Toast } from 'react-bootstrap'
+import { clearError, clearSuccess } from '../reducers/notificationReducer'
 
-const Notification = ({ className }) => {
+const Notification = ({ variant }) => {
+  const dispatch = useDispatch()
+
   const notification = useSelector(({ notification }) =>
-    className === 'success' ? notification.success : notification.error,
+    variant === 'success' ? notification.success : notification.error,
   )
   const message = notification.text
 
+  const onClose = () => {
+    dispatch(variant === 'success' ? clearSuccess() : clearError())
+  }
+
   if (message) {
-    return <div className={`notification ${className}`}>{message}</div>
+    return (
+      <Toast onClose={onClose}>
+        <Toast.Header>{variant}</Toast.Header>
+        <Toast.Body>{message}</Toast.Body>
+      </Toast>
+    )
   }
 }
 
 Notification.propTypes = {
-  className: PropTypes.string.isRequired,
+  variant: PropTypes.string.isRequired,
 }
 
 export default Notification

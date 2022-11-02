@@ -3,6 +3,7 @@ import Togglable from './Togglable'
 import CreateBlog from './CreateBlog'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { Table } from 'react-bootstrap'
 
 const Blogs = () => {
   const blogs = useSelector(({ blogs }) => blogs)
@@ -10,29 +11,30 @@ const Blogs = () => {
   // Mediate access to Togglable's toggleVisibility from CreateBlog
   const blogFormRef = useRef()
 
-  // Blog list item's style
-  const divStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
-
   return (
     <div>
-      <Togglable buttonLabel='new blog' ref={blogFormRef}>
+      <Togglable
+        buttonLabel='new blog'
+        ref={blogFormRef}
+        className='createBlog'
+      >
         <CreateBlog ref={blogFormRef} />
       </Togglable>
       <h2>blogs</h2>
-      {[...blogs]
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <div key={blog.id} style={divStyle}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-            <p>{blog.likes} likes</p>
-          </div>
-        ))}
+      <Table striped hover>
+        <tbody>
+          {[...blogs]
+            .sort((a, b) => b.likes - a.likes)
+            .map((blog) => (
+              <tr key={blog.id}>
+                <td>
+                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                </td>
+                <td>{blog.likes} likes</td>
+              </tr>
+            ))}
+        </tbody>
+      </Table>
     </div>
   )
 }

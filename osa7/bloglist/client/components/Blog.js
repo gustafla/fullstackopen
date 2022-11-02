@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, likeBlog, commentBlog } from '../reducers/blogsReducer'
 import { useNavigate } from 'react-router-dom'
+import { Button, Card } from 'react-bootstrap'
 
 const BlogComments = ({ blog }) => {
   const dispatch = useDispatch()
@@ -14,17 +15,27 @@ const BlogComments = ({ blog }) => {
   }
 
   return (
-    <div>
+    <div className='comments'>
       <h3>Comments</h3>
       <form onSubmit={addComment}>
-        <input type='text' name='comment' />
-        <button type='submit'>add comment</button>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <input type='text' name='comment' />
+              </td>
+              <td>
+                <Button type='submit'>add comment</Button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </form>
-      <ul>
-        {blog.comments.map((c) => (
-          <li key={c.id}>{c.comment}</li>
-        ))}
-      </ul>
+      {blog.comments.map((c) => (
+        <Card key={c.id}>
+          <Card.Body>{c.comment}</Card.Body>
+        </Card>
+      ))}
     </div>
   )
 }
@@ -56,30 +67,37 @@ const Blog = ({ blogId }) => {
 
   return (
     <div>
-      <h2>{blog.title}</h2>
+      <h2>
+        {blog.title}
+        <div className='likes'>
+          <div className='likesCount'>{blog.likes} likes</div>
+          <Button size='sm' onClick={handleLikeButton}>
+            like
+          </Button>
+        </div>
+      </h2>
 
-      <a href={blog.url}>{blog.url}</a>
-
-      <div>
-        {blog.likes} likes
-        <button onClick={handleLikeButton}>like</button>
-      </div>
+      <a href={blog.url} className='blogUrl'>
+        {blog.url}
+      </a>
 
       {blog.user ? (
-        <p>Added by {blog.user.name ? blog.user.name : blog.user.username}</p>
+        <p className='blogAddedBy'>
+          Added by {blog.user.name ? blog.user.name : blog.user.username}
+        </p>
       ) : null}
 
       {
         // Render remove-button only for blogs which don't have username,
         // or which have been posted by session owner
         !blog.user || blog.user.username === sessionUsername ? (
-          <button
+          <Button
             type='button'
             onClick={handleRemove}
             className='blogRemoveButton'
           >
             remove
-          </button>
+          </Button>
         ) : null
       }
 
