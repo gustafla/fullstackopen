@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
 import { notifySuccess } from './notificationReducer'
 import handleException from './handleException'
+import { initializeUsers } from './usersReducer'
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -42,6 +43,7 @@ export const createBlog = (blog) => {
     try {
       const newBlog = await blogService.create(token, blog)
       dispatch(addBlog(newBlog))
+      dispatch(initializeUsers())
       dispatch(notifySuccess(`${newBlog.title} by ${newBlog.author} added!`, 5))
     } catch (exception) {
       handleException(dispatch, exception, 'Failed to submit blog')
@@ -69,6 +71,7 @@ export const deleteBlog = (blog) => {
     try {
       await blogService.remove(token, blog)
       dispatch(removeBlog(blog))
+      dispatch(initializeUsers())
       dispatch(notifySuccess(`Removed ${blog.title}!`, 5))
     } catch (exception) {
       handleException(dispatch, exception, 'Failed to delete blog')
