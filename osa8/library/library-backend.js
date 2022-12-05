@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { v1: uuid } = require('uuid')
 
 let authors = [
   {
@@ -93,16 +94,69 @@ let books = [
 ]
 
 const typeDefs = gql`
+  type Book {
+    title: String!
+    published: Int!
+    author: String!
+    id: ID!
+    genres: [String!]!
+  }
+
+  type Author {
+    name: String!
+    id: ID!
+    born: Int
+    bookCount: Int!
+  }
+
   type Query {
     bookCount: Int!
     authorCount: Int!
+    allBooks(author: String, genre: String): [Book!]!
+    allAuthors: [Author!]!
+  }
+
+  type Mutation {
+    addBook(
+      title: String!,
+      author: String!,
+      published: Int!,
+      genres: [String!]!
+    ): Book
+    editAuthor(name: String!, setBornTo: Int!): Author
   }
 `
 
 const resolvers = {
+  Author: {
+    bookCount: (root) => books.filter(b => b.author === root.name).length,
+  },
   Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
+    allBooks: (_root, args) => books
+      .filter(b => !args.author || b.author === args.author)
+      .filter(b => !args.genre || b.genres.find(g => g === args.genre)),
+    allAuthors: () => authors,
+  },
+  Mutation: {
+    addBook: (_root, args) => {
+      const book = { ...args, id: uuid() }
+      books = books.concat(book)
+      if (!authors.find(a => a.name === args.author)) {
+        authors = authors.concat({ name: args.author, id: uuid() })
+      }
+      return book
+    },
+    editAuthor: (_root, args) => {
+      const author = authors.find(a => a.name === args.name)
+      if (!author) {
+        return null
+      }
+      const updated = { ...author, born: args.setBornTo }
+      authors = authors.map(a => a.id === updated.id ? updated : a)
+      return updated
+    }
   }
 }
 
