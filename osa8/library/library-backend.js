@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, gql, UserInputError } = require('apollo-server')
 const mongoose = require('mongoose')
 const Book = require('./models/book')
 const Author = require('./models/author')
@@ -84,26 +84,32 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (_root, args) => {
-      let author = await Author.findOne({ name: args.author })
+      const session = await mongoose.startSession()
 
-      // Create author if unknown
-      if (!author) {
-        try {
-          author = await new Author({ name: args.author }).save()
-        } catch (error) {
-          throw new UserInputError(error.message, {
-            invalidArgs: args,
-          })
-        }
-      }
-
+      // Transaction is used so that authors of invalid books don't end up in the DB
+      session.startTransaction()
       try {
-        const book = new Book({ ...args, author })
-        return book.save()
+        let author = await Author.findOne({ name: args.author }).session(session)
+
+        // Create author if unknown
+        if (!author) {
+          author = await new Author({ name: args.author }).save({ session })
+        }
+
+        // Create book
+        const book = await new Book({ ...args, author }).save({ session })
+
+        // Commit
+        await session.commitTransaction()
+        return book
       } catch (error) {
+        await session.abortTransaction()
+
         throw new UserInputError(error.message, {
           invalidArgs: args,
         })
+      } finally {
+        session.endSession()
       }
     },
     editAuthor: async (_root, args) => {
