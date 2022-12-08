@@ -3,12 +3,25 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, } from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('libraryUserToken')
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : null
+    }
+  }
+})
+
+const httpLink = new HttpLink({
+  uri: 'http://localhost:4000',
+})
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: new HttpLink({
-    uri: 'http://localhost:4000',
-  }),
+  link: authLink.concat(httpLink)
 })
 
 ReactDOM.createRoot(document.getElementById('root')).render(

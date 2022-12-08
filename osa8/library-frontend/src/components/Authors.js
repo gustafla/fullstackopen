@@ -2,9 +2,13 @@ import { useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 
-const SetBirthyear = ({ authors, editAuthor }) => {
+const SetBirthyear = ({ show, authors, editAuthor }) => {
   const [author, setAuthor] = useState('')
   const [born, setBorn] = useState('')
+
+  if (!show) {
+    return null
+  }
 
   const submit = (event) => {
     event.preventDefault()
@@ -68,7 +72,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <SetBirthyear authors={authors} editAuthor={editAuthor} />
+      <SetBirthyear authors={authors} editAuthor={editAuthor} show={!!props.token} />
     </div>
   )
 }
