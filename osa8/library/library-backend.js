@@ -88,9 +88,8 @@ const resolvers = {
         find_args.author = author.id
       }
 
-      // https://stackoverflow.com/questions/63507376/mongodb-mongoose-find-if-array-contains-includes
       if (args.genre) {
-        find_args.$expr = { $in: [args.genre, '$genres'] }
+        find_args.genres = { $in: [args.genre] }
       }
 
       return Book.find(find_args)
