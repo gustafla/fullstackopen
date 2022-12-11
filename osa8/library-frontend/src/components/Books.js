@@ -1,27 +1,31 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../queries'
+import { FIND_BOOKS, ALL_GENRES } from '../queries'
 
 const Books = (props) => {
-  const result = useQuery(ALL_BOOKS)
   const [filter, setFilter] = useState('')
+  const booksQuery = useQuery(FIND_BOOKS, {
+    variables: { genre: filter }
+  })
+  const genresQuery = useQuery(ALL_GENRES)
 
   if (!props.show) {
     return null
   }
 
-  const books = result.data.allBooks
+  if (booksQuery.loading || genresQuery.loading) {
+    return <div>Loading...</div>
+  }
 
-  // High algorithmic complexity, might get slow
-  const genres = books.reduce((genres, book) => {
-    for (const genre of book.genres) {
-      genres.add(genre)
-    }
-    return genres
-  }, new Set())
-  // Better approach?: concat all genres, sort, and remove dupes
-  // by a filter that compares current to next
+  const uniqueGenres = (allBooks) => {
+    // Flatten and filter out duplicate genres
+    let genres = allBooks.reduce((genres, book) => genres.concat(book.genres), [])
+    genres.sort()
+    return genres.filter((cur, i, arr) => (i + 1 >= arr.length) || cur !== arr[i + 1])
+  }
 
+  const books = booksQuery.data.allBooks
+  const genres = uniqueGenres(genresQuery.data.allBooks)
   const recommend = props.recommend
 
   return (
@@ -43,7 +47,6 @@ const Books = (props) => {
           </tr>
           {books
             .filter((b) => !recommend || b.genres.includes(recommend))
-            .filter((b) => !filter || b.genres.includes(filter))
             .map((a) => (
               <tr key={a.title}>
                 <td>{a.title}</td>
@@ -58,8 +61,7 @@ const Books = (props) => {
       <select value={filter} onChange={({ target }) => setFilter(target.value)}>
         <option value=''>Show all</option>
         {
-          [...genres]
-            .filter((g) => !recommend || g !== recommend) // Remove already recommend-filtered genre from options
+          genres.filter((g) => !recommend || g !== recommend) // Remove already recommend-filtered genre from options
             .map((g) => <option key={g} value={g}>{g}</option>)
         }
       </select>
