@@ -22,11 +22,17 @@ const Books = (props) => {
   // Better approach?: concat all genres, sort, and remove dupes
   // by a filter that compares current to next
 
+  const recommend = props.recommend
+
   return (
     <div>
-      <h2>books</h2>
+      <h2>{recommend ? 'recommendations' : 'books'}</h2>
 
-      {filter ? <p>in genre <b>{filter}</b></p> : null}
+      {filter || recommend ? <p>
+        books in {recommend ? <>your favorite genre <b>{recommend}</b></> : null /* books in recommend */}
+        {filter && recommend ? <> and </> : null                                 /* and */}
+        {filter ? <>genre <b>{filter}</b></> : null                              /* genre filter */}
+      </p> : null}
 
       <table>
         <tbody>
@@ -35,13 +41,16 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books.filter((b) => !filter || b.genres.includes(filter)).map((a) => (
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
-            </tr>
-          ))}
+          {books
+            .filter((b) => !recommend || b.genres.includes(recommend))
+            .filter((b) => !filter || b.genres.includes(filter))
+            .map((a) => (
+              <tr key={a.title}>
+                <td>{a.title}</td>
+                <td>{a.author.name}</td>
+                <td>{a.published}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
 
@@ -49,7 +58,9 @@ const Books = (props) => {
       <select value={filter} onChange={({ target }) => setFilter(target.value)}>
         <option value=''>Show all</option>
         {
-          [...genres].map((g) => <option key={g} value={g}>{g}</option>)
+          [...genres]
+            .filter((g) => !recommend || g !== recommend) // Remove already recommend-filtered genre from options
+            .map((g) => <option key={g} value={g}>{g}</option>)
         }
       </select>
     </div>
