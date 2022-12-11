@@ -10,9 +10,23 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   const [addBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_AUTHORS }, { query: FIND_BOOKS }, { query: ALL_GENRES }],
     onError: (error) => {
+      console.error(error)
       window.alert(error.graphQLErrors[0].message)
+    },
+    update: (cache, response) => {
+      const addBook = response.data.addBook
+      for (const genre of addBook.genres) {
+        cache.updateQuery({ query: FIND_BOOKS, variables: { genre } }, (data) => (data ? {
+          allBooks: data.allBooks.concat(addBook)
+        } : undefined))
+      }
+      cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => ({
+        allAuthors: allAuthors.find(a => a.id === addBook.author.id) ? allAuthors : allAuthors.concat(addBook.author)
+      }))
+      cache.updateQuery({ query: ALL_GENRES }, ({ allBooks }) => ({
+        allBooks: allBooks.concat(addBook)
+      }))
     }
   })
 
