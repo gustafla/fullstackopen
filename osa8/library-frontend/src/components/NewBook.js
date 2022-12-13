@@ -16,7 +16,7 @@ const NewBook = (props) => {
     },
     update: (cache, response) => {
       const addBook = response.data.addBook
-      for (const genre of addBook.genres) {
+      for (const genre of [...addBook.genres, '']) {
         cache.updateQuery({ query: FIND_BOOKS, variables: { genre } }, (data) => (data ? {
           allBooks: data.allBooks.concat(addBook)
         } : undefined))
