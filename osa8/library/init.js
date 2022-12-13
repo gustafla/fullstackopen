@@ -96,15 +96,25 @@ const sleep = (ms) => new Promise((resolve) => {
   setTimeout(resolve, ms)
 })
 
+const login = async () => {
+  await axios.post('http://localhost:4000', {
+    query: 'mutation {createUser(username: "root", favoriteGenre: "admin"){username, favoriteGenre}}'
+  })
+  const resp = await axios.post('http://localhost:4000', {
+    query: 'mutation {login(username: "root", password: "secret"){value}}'
+  })
+  return resp.data.data.login.value
+}
+
 const genreStr = (genres) => genres.reduce((str, genre) => str + '"' + genre + '", ', '[') + ']'
 
-const postMutations = async () => {
+const postMutations = async (token) => {
   for (const book of books) {
     const genres = genreStr(book.genres)
     console.log(genres)
     const resp = await axios.post('http://localhost:4000', {
       query: `mutation {addBook(title: "${book.title}", author: "${book.author}", published: ${book.published}, genres: ${genres}){title, author {name}, published, genres}}`
-    })
+    }, { headers: { Authorization: `Bearer ${token}` } })
     console.log(resp.data)
     await sleep(4000)
   }
@@ -113,11 +123,13 @@ const postMutations = async () => {
     if (author.born) {
       const resp = await axios.post('http://localhost:4000', {
         query: `mutation {editAuthor(name: "${author.name}", setBornTo: ${author.born}){name, born}}`
-      })
+      }, { headers: { Authorization: `Bearer ${token}` } })
       console.log(resp.data)
       await sleep(4000)
     }
   }
 }
 
-postMutations()
+login().then(async (token) => {
+  await postMutations(token)
+})

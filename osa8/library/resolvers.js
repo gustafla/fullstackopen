@@ -1,6 +1,5 @@
 const { UserInputError, AuthenticationError } = require('apollo-server')
 const { PubSub } = require('graphql-subscriptions')
-const mongoose = require('mongoose')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const User = require('./models/user')
@@ -11,13 +10,7 @@ const pubSub = new PubSub()
 
 const resolvers = {
   Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({ author: root.id })
-      return books.length
-    },
-  },
-  Book: {
-    author: async (root) => Author.findById(root.author)
+    bookCount: async (root) => root.books.length,
   },
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
@@ -38,9 +31,9 @@ const resolvers = {
         find_args.genres = { $in: [args.genre] }
       }
 
-      return Book.find(find_args)
+      return Book.find(find_args).populate('author')
     },
-    allAuthors: async () => Author.find({}),
+    allAuthors: async () => Author.find({}).populate('books'),
     me: (_root, _args, context) => {
       return context.currentUser
     }
@@ -51,33 +44,29 @@ const resolvers = {
         throw new AuthenticationError("not authenticated")
       }
 
-      const session = await mongoose.startSession()
-
-      // Transaction is used so that authors of invalid books don't end up in the DB
-      session.startTransaction()
       try {
-        let author = await Author.findOne({ name: args.author }).session(session)
+        let author = await Author.findOne({ name: args.author })
 
         // Create author if unknown
         if (!author) {
-          author = await new Author({ name: args.author }).save({ session })
+          author = new Author({ name: args.author, books: [] })
+          await author.validate()
         }
 
         // Create book
-        const book = await new Book({ ...args, author }).save({ session })
+        const book = await new Book({ ...args, author }).save()
+
+        // Add book to author
+        author.books.push(book)
+        await author.save()
 
         // Commit and publish to subscribers
-        await session.commitTransaction()
         pubSub.publish('BOOK_ADDED', { bookAdded: book })
         return book
       } catch (error) {
-        await session.abortTransaction()
-
         throw new UserInputError(error.message, {
           invalidArgs: args,
         })
-      } finally {
-        session.endSession()
       }
     },
     editAuthor: async (_root, args, { currentUser }) => {
