@@ -1,10 +1,13 @@
 const { UserInputError, AuthenticationError } = require('apollo-server')
+const { PubSub } = require('graphql-subscriptions')
 const mongoose = require('mongoose')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const User = require('./models/user')
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = process.env.JWT_SECRET
+
+const pubSub = new PubSub()
 
 const resolvers = {
   Author: {
@@ -63,8 +66,9 @@ const resolvers = {
         // Create book
         const book = await new Book({ ...args, author }).save({ session })
 
-        // Commit
+        // Commit and publish to subscribers
         await session.commitTransaction()
+        pubSub.publish('BOOK_ADDED', { bookAdded: book })
         return book
       } catch (error) {
         await session.abortTransaction()
@@ -118,6 +122,11 @@ const resolvers = {
       }
 
       return { value: jwt.sign(userForToken, JWT_SECRET) }
+    }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubSub.asyncIterator('BOOK_ADDED')
     }
   }
 }
