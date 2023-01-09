@@ -6,7 +6,7 @@ const isPositiveReal = (number: number): boolean => {
   return !isNaN(number) && isFinite(number) && number > 0
 }
 
-const calculateBmi = (height: Centimeters, weight: Kilograms): string | undefined => {
+const calculateBmi = (height: Centimeters, weight: Kilograms): BmiCategory | undefined => {
   if (!isPositiveReal(height) || !isPositiveReal(weight)) {
     return undefined
   }
@@ -25,6 +25,8 @@ const calculateBmi = (height: Centimeters, weight: Kilograms): string | undefine
   }
   return 'Underweight'
 }
+
+export default calculateBmi
 
 let height, weight
 
