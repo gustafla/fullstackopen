@@ -26,4 +26,22 @@ const calculateBmi = (height: Centimeters, weight: Kilograms): string | undefine
   return 'Underweight'
 }
 
-console.log(calculateBmi(180, 74))
+let height, weight
+
+for (const arg of process.argv) {
+  const n = Number(arg)
+  if (isPositiveReal(n)) {
+    if (!height) {
+      height = n
+      continue
+    }
+    weight = n
+    break
+  }
+}
+
+if (height && weight) {
+  console.log(calculateBmi(height, weight))
+} else {
+  console.log("Usage: bmiCalculator height weight (in cm and kg)")
+}
