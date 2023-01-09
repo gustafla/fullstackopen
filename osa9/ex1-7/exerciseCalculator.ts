@@ -53,4 +53,28 @@ const calculateExercises = (dailyHours: Hours[], target: Hours): Result | undefi
   })
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+let target: Hours
+let dailies: Hours[] = []
+
+for (const arg of process.argv) {
+  const n = Number(arg)
+  if (isNonNegativeReal(n)) {
+    if (!target) {
+      target = n
+      continue
+    }
+    dailies.push(n)
+  } else {
+    // If args input contains wrongly formatted data in the middle, stop parsing and fail usage
+    if (target) {
+      target = null
+      break
+    }
+  }
+}
+
+if (target && dailies.length !== 0) {
+  console.log(calculateExercises(dailies, target))
+} else {
+  console.log("Usage: exerciseCalculator target [hours...]")
+}
