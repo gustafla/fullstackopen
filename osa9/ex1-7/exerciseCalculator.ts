@@ -53,7 +53,9 @@ const calculateExercises = (dailyHours: Hours[], target: Hours): Result | undefi
   });
 };
 
-let target: Hours;
+export default calculateExercises;
+
+let target: Hours | undefined;
 const dailies: Hours[] = [];
 
 for (const arg of process.argv) {
@@ -67,7 +69,7 @@ for (const arg of process.argv) {
   } else {
     // If args input contains wrongly formatted data in the middle, stop parsing and fail usage
     if (target) {
-      target = null;
+      target = undefined;
       break;
     }
   }
