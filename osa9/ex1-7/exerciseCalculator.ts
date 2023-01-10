@@ -1,6 +1,6 @@
-type Rating = 1 | 2 | 3
-type RatingDescription = 'more exercise is required' | 'not too bad but could be better' | 'well done'
-type Hours = number
+type Rating = 1 | 2 | 3;
+type RatingDescription = 'more exercise is required' | 'not too bad but could be better' | 'well done';
+type Hours = number;
 
 interface Result {
   periodLength: number,
@@ -13,34 +13,34 @@ interface Result {
 }
 
 const isNonNegativeReal = (number: number): boolean => {
-  return !isNaN(number) && isFinite(number) && number >= 0
-}
+  return !isNaN(number) && isFinite(number) && number >= 0;
+};
 
 const describeRating = (rating: Rating): RatingDescription => {
   if (rating === 1) {
-    return 'more exercise is required'
+    return 'more exercise is required';
   }
   if (rating === 2) {
-    return 'not too bad but could be better'
+    return 'not too bad but could be better';
   }
-  return 'well done'
-}
+  return 'well done';
+};
 
 const calculateExercises = (dailyHours: Hours[], target: Hours): Result | undefined => {
-  const periodLength = dailyHours.length
+  const periodLength = dailyHours.length;
 
   if (periodLength === 0) {
-    return undefined
+    return undefined;
   }
 
   for (const hours of [...dailyHours, target]) {
     if (!isNonNegativeReal(hours)) {
-      return undefined
+      return undefined;
     }
   }
 
-  const average = dailyHours.reduce((sum, h) => sum + h, 0) / periodLength
-  const rating: Rating = average < target - 0.5 ? 1 : average < target ? 2 : 3
+  const average = dailyHours.reduce((sum, h) => sum + h, 0) / periodLength;
+  const rating: Rating = average < target - 0.5 ? 1 : average < target ? 2 : 3;
 
   return ({
     periodLength,
@@ -50,31 +50,31 @@ const calculateExercises = (dailyHours: Hours[], target: Hours): Result | undefi
     ratingDescription: describeRating(rating),
     target,
     average,
-  })
-}
+  });
+};
 
-let target: Hours
-let dailies: Hours[] = []
+let target: Hours;
+const dailies: Hours[] = [];
 
 for (const arg of process.argv) {
-  const n = Number(arg)
+  const n = Number(arg);
   if (isNonNegativeReal(n)) {
     if (!target) {
-      target = n
-      continue
+      target = n;
+      continue;
     }
-    dailies.push(n)
+    dailies.push(n);
   } else {
     // If args input contains wrongly formatted data in the middle, stop parsing and fail usage
     if (target) {
-      target = null
-      break
+      target = null;
+      break;
     }
   }
 }
 
 if (target && dailies.length !== 0) {
-  console.log(calculateExercises(dailies, target))
+  console.log(calculateExercises(dailies, target));
 } else {
-  console.log("Usage: exerciseCalculator target [hours...]")
+  console.log("Usage: exerciseCalculator target [hours...]");
 }
