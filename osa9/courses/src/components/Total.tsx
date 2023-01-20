@@ -1,10 +1,10 @@
-import {CoursePart} from '../App';
+import { CoursePart } from '../App';
 
 interface Props {
   courseParts: CoursePart[],
 }
 
-const Total = ({courseParts}: Props) => {
+const Total = ({ courseParts }: Props) => {
   return (
     <p>
       Number of exercises{" "}
