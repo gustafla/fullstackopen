@@ -6,8 +6,18 @@ const router = express.Router();
 
 router.get('/', (_req, res) => {
   console.log('Fetching all patients!');
-  const patients = patientsService.getNonSensitiveEntries();
+  const patients = patientsService.getPublicEntries();
   res.json(patients);
+});
+
+router.get('/:id', (req, res) => {
+  const patient = patientsService.findById(req.params.id);
+
+  if (patient) {
+    res.json(patient);
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 router.post('/', (req, res) => {
